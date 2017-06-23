@@ -2,7 +2,7 @@
   "name": "hsm-store",
   "version": "0.0.0",
   "description": "",
-  "main": "lib/index.js",
+  "main": "lib/hsm-store.js",
   "files": [
     "lib/",
     "LICENSE"

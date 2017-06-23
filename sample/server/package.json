@@ -1,0 +1,8 @@
+{
+  "name": "hsm-store-server-sample",
+  "version": "0.0.1",
+  "description": "This is a sample on how to use the hsm-store module!",
+  "dependencies" : {
+    "hsm-store" : "*"
+  }
+}
