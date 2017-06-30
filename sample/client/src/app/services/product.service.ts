@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PRODUCTS } from '../models/product-data';
-import { Product } from '../models/Product'; 
+import { Product } from '../models/product'; 
 // import { Observable, Subject } from 'rxjs';
 
 import { Http, Headers } from '@angular/http';

@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { FlashMessagesService} from 'angular2-flash-messages'
 import { Lightbox, IAlbum } from 'angular2-lightbox';
 
-import { Product } from '../../models/Product';
+import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
 import { CartStore } from '../../store/cart.store';
 

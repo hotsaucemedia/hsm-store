@@ -1,7 +1,7 @@
 import {Action} from '@ngrx/store';
 import {ActionTypes} from '../cart.store';
 console.log(ActionTypes)
-import {Product} from '../../models/Product';
+import {Product} from '../../models/product';
 
 export interface State {
   products: Array<Product>;

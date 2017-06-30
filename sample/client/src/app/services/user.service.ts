@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, Observer } from 'rxjs/Rx';
 import { UserApi } from '../../fw/userApi/user-api';
-import { User } from '../models/User';
+import { User } from '../models/user';
 import { MainAuthService } from './main-auth.service';
 import { tokenNotExpired } from 'angular2-jwt';
 import { Subject }    from 'rxjs/Subject';
