@@ -71,3 +71,6 @@ typings/
 # dotenv environment variables file
 .env
 
+# keep config.json secret, it may contain sensitive data
+config.json
+
