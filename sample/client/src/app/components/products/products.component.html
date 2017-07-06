@@ -5,14 +5,26 @@
             <div class="item  col-xs-4 col-lg-4">
                 <div class="thumbnail">             
                         <!--<img class="group list-group-image prettyPhoto" src={{product.src}} alt="" (click)="open(i)"/>-->
-                        <img class="group list-group-image prettyPhoto" src={{product.src}} alt=""/>
+                        <img class="group list-group-image prettyPhoto" src={{product.images[0].src}} alt=""/>
                     <div class="caption">
                         <h4 class="group inner list-group-item-heading">
-                            {{product.name}}</h4>
+                            {{product.title}}</h4>
                         <p class="group inner list-group-item-text">
-                            {{product.desc}}</p>
-                        <p class="group inner list-group-item-text">
-                            {{product.variants}}</p>
+                            {{product.body_html}}</p>
+                        <div class="variants">
+                            <div *ngFor="let opt of product.options">
+                                {{opt.name}}:&nbsp;
+                                <!--
+                                <select (change)="changeVariant(product)" class="select-variant" name="{{opt.name}}">
+                                -->
+                                <select class="select-variant" name="{{opt.name}}">
+                                    <option *ngFor="let value of opt.values">{{value}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--
+                        <div class="variant-price">{{product.selectedVariant.formattedPrice}}</div>
+                        -->
                         <div class="row">
                             <div class="col-md-3"><strong>Quantity: </strong></div>
                             <div class="col-md-6">

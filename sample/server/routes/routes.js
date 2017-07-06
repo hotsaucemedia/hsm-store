@@ -2,6 +2,9 @@ const bCrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const jwtSecret = require('../config/jwtSecret');
 
+// Shopify
+const shopify = require('../lib/shopify');
+
 module.exports = function(app, user, auth_user, product){
 	const User = user;
   const Auth_user = auth_user;
@@ -375,7 +378,6 @@ function sendUserToClient(user, msg, res){
   });
 
 
-
   app.get('/product-detail/:id', function(req,res){
     console.log("REQ>PARAM: ", req.params.id );
     Product.findOne({where: {id: req.params.id}}).then((product) => {
@@ -390,6 +392,7 @@ function sendUserToClient(user, msg, res){
     });
   })
 
+  /*
   app.get('/products', function(req,res,next) {
     // console.log("REQ from client: ", req);
 
@@ -404,6 +407,27 @@ function sendUserToClient(user, msg, res){
 			  console.log("###### Error : ", err);												
     });
   })
+  */
+
+  // Shopify
+
+  app.get('/products', function(req,res,next) {
+    shopify.fetchProducts()
+      .then(function(data) {
+        // Flatten products array
+        let products = [];
+        data.forEach(function(datum) {
+          products.push(datum.attrs);
+        })
+
+        // Send array to client
+        sendProductsToClient(products, 'Products in Shopify store ...', res);
+      })
+      .catch(function(reason) {
+        console.log('Promise rejected because ' + reason);
+      });
+    });
+
 
 function sendProductToClient(product, msg, res){
   return res.json({ success: true,
@@ -419,7 +443,6 @@ function sendProductsToClient(products, msg, res){
                     products: products
                   });
 }
-
 
 };
 

@@ -69,6 +69,15 @@ export class ProductsComponent implements OnInit {
       })
   }
 
+  /*
+  changeVariant(product): void {
+    product.options.filter(function(option) {
+      return option.name === (<HTMLInputElement>event.target).name;
+    })[0].selected = (<HTMLInputElement>event.target).value;
+    console.log(product.selectedVariant.title); //debugging
+  }
+  */
+
   // open(i): void {
   //   // open lightbox 
   //   this.lightbox.open(this.albums, i);

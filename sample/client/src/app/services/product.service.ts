@@ -28,7 +28,6 @@ export class ProductService {
             .then(products => products.find(product => product.id === id));
     }
 
-
 // to get specific data from server
 
     getProductFromServer(id){
@@ -45,6 +44,5 @@ export class ProductService {
 		return this.http.get('http://localhost:3000/products', {headers: headers})
 			.map(res => res.json());
     }
-
 
 }
