@@ -414,14 +414,14 @@ function sendUserToClient(user, msg, res){
   app.get('/products', function(req,res,next) {
     shopify.fetchProducts()
       .then(function(data) {
-        // Flatten products array
-        let products = [];
-        data.forEach(function(datum) {
-          products.push(datum.attrs);
-        })
+				// Flatten products array
+				let products = [];
+				data.forEach(function(datum) {
+					products.push(datum.attrs);
+				});
 
-        // Send array to client
-        sendProductsToClient(products, 'Products in Shopify store ...', res);
+				// Send array to client
+				sendProductsToClient(products, 'Products in Shopify store ...', res);
       })
       .catch(function(reason) {
         console.log('Promise rejected because ' + reason);

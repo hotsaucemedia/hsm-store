@@ -4,7 +4,6 @@ module.exports = function(sequelize, Sequelize) {
 		id: { autoIncrement: true, primaryKey: true, type: Sequelize.INTEGER},
 		name: { type: Sequelize.STRING},
 		desc: { type: Sequelize.STRING},
-		variants: { type: Sequelize.STRING},
 		src: { type: Sequelize.STRING},
 		thumb: { type: Sequelize.STRING},
 		category: {type: Sequelize.ENUM('general','special'),defaultValue:'general'},
