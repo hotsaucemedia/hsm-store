@@ -4,7 +4,7 @@
         <div *ngFor="let product of products; let i=index">
             <div class="item  col-xs-4 col-lg-4">
                 <div class="thumbnail">             
-                        <img class="group list-group-image prettyPhoto" src={{product.src}} alt="" (click)="open(i)"/>
+                        <img class="group list-group-image prettyPhoto" src={{product.image}} alt="" (click)="open(i)"/>
                     <div class="caption">
                         <h4 class="group inner list-group-item-heading">
                             {{product.name}}</h4>
@@ -14,16 +14,10 @@
                             <div *ngFor="let variant of product.variants">
                                 {{variant.name}}:&nbsp;
                                 <select (change)="changeVariant(product)" class="select-variant" name="{{variant.name}}">
-                                <!--
-                                <select class="select-variant" name="{{variant.name}}">
-                                -->
                                     <option *ngFor="let opt of variant.options">{{opt.name}}</option>
                                 </select>
                             </div>
                         </div>
-                        <!--
-                        <div class="variant-price">{{product.selectedVariant.formattedPrice}}</div>
-                        -->
                         <div class="row">
                             <div class="col-md-3"><strong>Quantity: </strong></div>
                             <div class="col-md-6">
@@ -34,7 +28,8 @@
                         <div class="row">
                             <div class="col-xs-12 col-md-6">
                                 <p class="lead">
-                                    ${{product.variants.length > 0 ? product.selectedVariant.price : product.price}}</p>
+                                    ${{product.variants.length > 0 ? product.selectedVariant.price : product.price}}
+                                </p>
                             </div>
                             <div class="col-xs-12 col-md-6">
                                 <button (click)="addToCart(product)" class="btn btn-sm btn-primary">Add to Cart</button>

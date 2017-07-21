@@ -395,6 +395,7 @@ function sendUserToClient(user, msg, res){
     });
   })
 
+  /*
   app.get('/products', function(req,res,next) {
     // console.log("REQ from client: ", req);
 
@@ -413,7 +414,7 @@ function sendUserToClient(user, msg, res){
     .then(function (products) {
       if (!products) {
         req.msg = "No products in database!";
-        return res.json({success: false, msg:req.msg});
+        return res.json({success: false, msg: req.msg});
       }
       else {
         sendProductsToClient(products, "Products are loaded successfully.", res);
@@ -423,28 +424,65 @@ function sendUserToClient(user, msg, res){
 			  console.log("###### Error : ", err);												
     });
   })
+  */
 
-  /*
 
   //Shopify
 
   app.get('/products', function(req,res,next) {
     shopify.fetchProducts()
       .then(function(data) {
-				// Flatten products array
-				let products = [];
-				data.forEach(function(datum) {
-					products.push(datum.attrs);
-				});
 
-				// Send array to client
+				// Extract relevant data and restructurej
+				let products = [];
+				data.forEach(function(d) {
+          let product = {};
+
+          product.name = d.attrs.title;
+          product.desc = d.attrs.body_html;
+          product.available = d.attrs.available;
+          product.id = d.attrs.product_id;
+          product.image = d.attrs.images[0].src;
+          product.thumb = ""; // to do
+          product.price = ""; // to do
+
+          product.variants = [];
+
+          d.attrs.options.forEach(function(o) {
+            let variant = {};
+
+            variant.name = o.name;
+            variant.id = o.id;
+
+            variant.options = [];
+
+            d.attrs.variants.forEach(function(v) {
+              let option = {};
+              option.id = v.id;
+              option.name = v.title;
+              option.available = v.available;
+              option.price = v.price;
+              option.image = ""; // to do
+              option.thumb = ""; // to do
+
+              variant.options.push(option);
+            });
+
+            product.variants.push(variant);
+ 
+          });
+
+          products.push(product);
+
+        });
+
+				// Send data client
 				sendProductsToClient(products, 'Products in Shopify store ...', res);
       })
       .catch(function(reason) {
         console.log('Promise rejected because ' + reason);
       });
     });
-  */
 
 
 function sendProductToClient(product, msg, res){

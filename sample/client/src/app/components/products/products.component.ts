@@ -75,14 +75,17 @@ export class ProductsComponent implements OnInit {
   }
 
   changeVariant(product): void {
+
     product.selectedVariant = product.variants
       .filter(function(variant) {
         return variant.name === (<HTMLInputElement>event.target).name;
-      })
+      })[0].options
       .filter(function(option) {
-        return option.name = (<HTMLInputElement>event.target).value;
-      })[0];
+       return option.name === (<HTMLInputElement>event.target).value;
+     })[0];
+
     console.log(product.selectedVariant); //debugging
+
   }
 
   // open(i): void {
