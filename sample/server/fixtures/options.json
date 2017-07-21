@@ -1,0 +1,50 @@
+[
+    {
+        "model": "option",
+        "keys": ["id"],
+        "data": {
+            "id": 1,
+            "name": "500g",
+            "image": "",
+            "thumb": "",
+            "price": 10.00,
+            "variant_id": 1
+        }
+    },
+    {
+        "model": "option",
+        "keys": ["id"],
+        "data": {
+            "id": 2,
+            "name": "1kg",
+            "image": "",
+            "thumb": "",
+            "price": 20.00,
+            "variant_id": 1
+        }
+    },
+    {
+        "model": "option",
+        "keys": ["id"],
+        "data": {
+            "id": 3,
+            "name": "2kg",
+            "image": "",
+            "thumb": "",
+            "price": 40.00,
+            "variant_id": 1
+        }
+    },
+    {
+        "model": "option",
+        "keys": ["id"],
+        "data": {
+            "id": 4,
+            "name": "5kg",
+            "image": "",
+            "thumb": "",
+            "price": 100.00,
+            "variant_id": 1
+        }
+    }
+]

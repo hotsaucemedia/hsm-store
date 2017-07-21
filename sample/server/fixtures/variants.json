@@ -1,0 +1,11 @@
+[
+    {
+        "model": "variant",
+        "keys": ["id"],
+        "data": {
+            "id": 1,
+            "name": "Weight",
+            "product_id": 1
+        }
+    }
+]

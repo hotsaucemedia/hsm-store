@@ -40,4 +40,10 @@ db.sequelize.models.auth_user.belongsTo(db.sequelize.models.user, { foreignKey: 
 db.sequelize.models.provider.hasMany(db.sequelize.models.auth_user, { foreignKey: 'provider_id' });
 db.sequelize.models.auth_user.belongsTo(db.sequelize.models.provider, { foreignKey: 'provider_id' });
 
+db.sequelize.models.product.hasMany(db.sequelize.models.variant, { foreignKey: 'product_id' });
+db.sequelize.models.variant.belongsTo(db.sequelize.models.product, { foreignKey: 'product_id' });
+
+db.sequelize.models.variant.hasMany(db.sequelize.models.option, { foreignKey: 'variant_id' });
+db.sequelize.models.option.belongsTo(db.sequelize.models.variant, { foreignKey: 'variant_id' });
+
 module.exports = db;

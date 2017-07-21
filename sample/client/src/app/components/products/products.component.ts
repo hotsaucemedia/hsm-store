@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { FlashMessagesService} from 'angular2-flash-messages'
 // import { Lightbox, IAlbum } from 'angular2-lightbox';
 
-import { Product } from '../../models/product';
+import { Product } from '../../models/product'; // currently unused
 import { ProductService } from '../../services/product.service';
 import { CartStore } from '../../store/cart.store';
 ;
@@ -16,11 +16,9 @@ import { CartStore } from '../../store/cart.store';
 })
 export class ProductsComponent implements OnInit {
   
-  products:Product[];
+  products; // Removed data type Product[]
   quantity: number[];
   // private albums: Array<any> = [];
-
-  
 
   constructor (private productService:ProductService,
                private router:Router, 
@@ -49,7 +47,14 @@ export class ProductsComponent implements OnInit {
         if (data.success){
           // this.flashMessage.show(data.msg, {cssClass: 'alert-info', timeout: 2000});
           this.products = data.products;
-          console.log("all products: ", data.products);
+
+          this.products.forEach(function(product) {
+            if (product.variants.length > 0) {
+              product.selectedVariant = product.variants[0].options[0];
+              }
+          });
+
+          console.log("all products: ", this.products);
           // for (let i = 0; i < data.products.length; i++) {
           //   const src = data.products[i]['src'];
           //   const caption = data.products[i]['name'];
@@ -69,14 +74,16 @@ export class ProductsComponent implements OnInit {
       })
   }
 
-  /*
   changeVariant(product): void {
-    product.options.filter(function(option) {
-      return option.name === (<HTMLInputElement>event.target).name;
-    })[0].selected = (<HTMLInputElement>event.target).value;
-    console.log(product.selectedVariant.title); //debugging
+    product.selectedVariant = product.variants
+      .filter(function(variant) {
+        return variant.name === (<HTMLInputElement>event.target).name;
+      })
+      .filter(function(option) {
+        return option.name = (<HTMLInputElement>event.target).value;
+      })[0];
+    console.log(product.selectedVariant); //debugging
   }
-  */
 
   // open(i): void {
   //   // open lightbox 

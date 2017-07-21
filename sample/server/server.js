@@ -41,15 +41,28 @@ const models = require("./models");
 models.sequelize.sync().then(() => {
 	// console.log(models.user);
   console.log('You are connected to the database using sequelize module!');
-  sequelize_fixtures.loadFile('./fixtures/*.json', models).then(() =>{
+
+  // Load fixtures in correct order, to avoid referential integrity error
+  sequelize_fixtures.loadFile('./fixtures/products.json', models)
+ 	.then(sequelize_fixtures.loadFile('./fixtures/variants.json', models)) 
+ 	.then(sequelize_fixtures.loadFile('./fixtures/options.json', models)) 
+  	.then(() =>{
 	console.log("database is updated!");
   });
+
   }).catch((err) => {
     console.log(err,"Some problems with database connection!!!");
 });
 
 // importing routes and passing passport as auth.js need it
-const authRoute = require('./routes/routes.js')(app, models.user, models.auth_user, models.product);
+const authRoute = require('./routes/routes.js')(
+	app,
+	models.user,
+	models.auth_user,
+	models.product,
+	models.variant,
+	models.option
+);
 
 // statring server
 app.listen(port, (err) => {

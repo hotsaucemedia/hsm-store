@@ -5,7 +5,7 @@ const jwtSecret = require('../config/jwtSecret');
 // Shopify
 const shopify = require('../lib/shopify');
 
-module.exports = function(app, user, auth_user, product){
+module.exports = function(app, user, auth_user, product, variant, option) {
 	const User = user;
   const Auth_user = auth_user;
 	const Product = product;
@@ -380,7 +380,10 @@ function sendUserToClient(user, msg, res){
 
   app.get('/product-detail/:id', function(req,res){
     console.log("REQ>PARAM: ", req.params.id );
-    Product.findOne({where: {id: req.params.id}}).then((product) => {
+    Product.findOne({
+      where: {id: req.params.id},
+      include: [{model: variant}]
+    }).then((product) => {
       if (!product){
         req.msg = "No such a product in database!";
         return res.json({success: false, msg:req.msg});
@@ -392,24 +395,38 @@ function sendUserToClient(user, msg, res){
     });
   })
 
-  /*
   app.get('/products', function(req,res,next) {
     // console.log("REQ from client: ", req);
 
-    Product.findAll().then(function (product) {
-      if (!product) {
-        req.msg = "No product in database!";
-        return res.json({success: false, msg:req.msg});
-      }else{
-        sendProductsToClient(product,"products are loaded successfully.", res);
+    Product.findAll({
+      include: [
+        {
+          model: variant,
+          include: [
+            {
+              model: option
+            }
+          ]
         }
-      }).catch(function(err){
+      ]
+    })
+    .then(function (products) {
+      if (!products) {
+        req.msg = "No products in database!";
+        return res.json({success: false, msg:req.msg});
+      }
+      else {
+        sendProductsToClient(products, "Products are loaded successfully.", res);
+      }
+    })
+    .catch(function(err){
 			  console.log("###### Error : ", err);												
     });
   })
-  */
 
-  // Shopify
+  /*
+
+  //Shopify
 
   app.get('/products', function(req,res,next) {
     shopify.fetchProducts()
@@ -427,6 +444,7 @@ function sendUserToClient(user, msg, res){
         console.log('Promise rejected because ' + reason);
       });
     });
+  */
 
 
 function sendProductToClient(product, msg, res){
