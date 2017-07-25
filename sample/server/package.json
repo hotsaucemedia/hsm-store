@@ -21,7 +21,7 @@
     "mysql": "*",
     "mysql2": "*",
     "passport-jwt": "*",
-    "sequelize": "*",
+    "sequelize": "^4.4.2",
     "sequelize-fixtures": "*",
     "shopify-buy": "^0.7.1"
   },

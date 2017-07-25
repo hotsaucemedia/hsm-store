@@ -2,14 +2,23 @@ const bCrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const jwtSecret = require('../config/jwtSecret');
 
-// Shopify
-const shopify = require('../lib/shopify');
+const shopifyStore = require('../lib/shopify');
+const defaultStore = require('../lib/default');
 
 module.exports = function(app, user, auth_user, product, variant, option) {
 	const User = user;
   const Auth_user = auth_user;
-	const Product = product;
 
+  // Flag for Shopify vs. default store
+  var shopify = false;
+  var store = {};
+
+  if (shopify) {
+    store = shopifyStore;
+  }
+  else {
+    store = new defaultStore(product, variant, option);
+  }
 
   // login section
   app.post('/users/login', function(req, res) {
@@ -378,129 +387,18 @@ function sendUserToClient(user, msg, res){
   });
 
 
-  app.get('/product-detail/:id', function(req,res){
-    console.log("REQ>PARAM: ", req.params.id );
-    Product.findOne({
-      where: {id: req.params.id},
-      include: [{model: variant}]
-    }).then((product) => {
-      if (!product){
-        req.msg = "No such a product in database!";
-        return res.json({success: false, msg:req.msg});
-      }else{
-        sendProductToClient(product, "the product is found.", res);
-      }
-    }).catch(function(err){
-			  console.log("###### Error : ", err);
-    });
-  })
+  app.get('/product-detail/:id', function(req, res){
+    console.log("Request parameters: ", req.params.id );
+    store.getOneProduct(req, res);
+  });
 
-  /*
-  app.get('/products', function(req,res,next) {
-    // console.log("REQ from client: ", req);
-
-    Product.findAll({
-      include: [
-        {
-          model: variant,
-          include: [
-            {
-              model: option
-            }
-          ]
-        }
-      ]
-    })
-    .then(function (products) {
-      if (!products) {
-        req.msg = "No products in database!";
-        return res.json({success: false, msg: req.msg});
-      }
-      else {
-        sendProductsToClient(products, "Products are loaded successfully.", res);
-      }
-    })
-    .catch(function(err){
-			  console.log("###### Error : ", err);												
-    });
-  })
-  */
-
-
-  //Shopify
-
-  app.get('/products', function(req,res,next) {
-    shopify.fetchProducts()
-      .then(function(data) {
-
-				// Extract relevant data and restructurej
-				let products = [];
-				data.forEach(function(d) {
-          let product = {};
-
-          product.name = d.attrs.title;
-          product.desc = d.attrs.body_html;
-          product.available = d.attrs.available;
-          product.id = d.attrs.product_id;
-          product.image = d.attrs.images[0].src;
-          product.thumb = ""; // to do
-          product.price = ""; // to do
-
-          product.variants = [];
-
-          d.attrs.options.forEach(function(o) {
-            let variant = {};
-
-            variant.name = o.name;
-            variant.id = o.id;
-
-            variant.options = [];
-
-            d.attrs.variants.forEach(function(v) {
-              let option = {};
-              option.id = v.id;
-              option.name = v.title;
-              option.available = v.available;
-              option.price = v.price;
-              option.image = ""; // to do
-              option.thumb = ""; // to do
-
-              variant.options.push(option);
-            });
-
-            product.variants.push(variant);
- 
-          });
-
-          products.push(product);
-
-        });
-
-				// Send data client
-				sendProductsToClient(products, 'Products in Shopify store ...', res);
-      })
-      .catch(function(reason) {
-        console.log('Promise rejected because ' + reason);
-      });
-    });
-
-
-function sendProductToClient(product, msg, res){
-  return res.json({ success: true,
-                    msg: msg,
-                    product: product
-                  });
+  
+  app.get('/products', function(req, res, next) {
+    console.log("Request data: ", req);
+    store.getAllProducts(req, res);
+  });
+  
 }
-
-
-function sendProductsToClient(products, msg, res){
-  return res.json({ success: true,
-                    msg: msg,
-                    products: products
-                  });
-}
-
-};
 
 function isCorrectPassword(userpass,password){
   return bCrypt.compareSync(userpass, password);

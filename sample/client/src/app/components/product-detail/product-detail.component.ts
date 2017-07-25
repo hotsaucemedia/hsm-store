@@ -43,7 +43,7 @@ export class ProductDetailComponent {
                     if (data){
                         this.selectedProduct = data.product;
                         const album = {
-                            src: data.product.src,
+                            image: data.product.image,
                             caption: data.product.name,
                             thumb: data.product.thumb
                         };
@@ -51,6 +51,7 @@ export class ProductDetailComponent {
                         }else{
                             this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
                         }
+                        console.log(data);
                 });
         })
     }

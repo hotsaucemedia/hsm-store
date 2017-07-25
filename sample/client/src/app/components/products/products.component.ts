@@ -16,7 +16,7 @@ import { CartStore } from '../../store/cart.store';
 })
 export class ProductsComponent implements OnInit {
   
-  products; // Removed data type Product[]
+  products: any[]; // Removed data type Product[]
   quantity: number[];
   // private albums: Array<any> = [];
 
@@ -46,7 +46,7 @@ export class ProductsComponent implements OnInit {
         console.log("Product DATA from server: ", data);
         if (data.success){
           // this.flashMessage.show(data.msg, {cssClass: 'alert-info', timeout: 2000});
-          this.products = data.products;
+          this.products = data.product;
 
           this.products.forEach(function(product) {
             if (product.variants.length > 0) {
@@ -54,7 +54,7 @@ export class ProductsComponent implements OnInit {
               }
           });
 
-          console.log("all products: ", this.products);
+          console.log("All products: ", this.products);
           // for (let i = 0; i < data.products.length; i++) {
           //   const src = data.products[i]['src'];
           //   const caption = data.products[i]['name'];

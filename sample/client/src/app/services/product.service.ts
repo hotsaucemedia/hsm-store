@@ -37,7 +37,7 @@ export class ProductService {
 			.map(res => res.json());
 
     }
-// to get all porducts from server
+// to get all products from server
     getProductsFromServer(){
 		let headers = new Headers();
 		headers.append('Content-Type', 'application/json');
