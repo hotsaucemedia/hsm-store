@@ -7,6 +7,8 @@ import { Lightbox, IAlbum } from 'angular2-lightbox';
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
 import { CartStore } from '../../store/cart.store';
+import { VariantStore } from '../../store/variant.store';
+
 
 @Component({
     selector: 'app-product-detail',
@@ -15,7 +17,7 @@ import { CartStore } from '../../store/cart.store';
 })
 
 export class ProductDetailComponent {
-    product: any = {};
+    product: any = {}; // removed datatype Product
     quantity: number;
     private albums: Array<any> = [];
 
@@ -25,7 +27,8 @@ export class ProductDetailComponent {
         private location:Location,
         private cartStore: CartStore,
         private flashMessage: FlashMessagesService,
-        private lightbox: Lightbox
+        private lightbox: Lightbox,
+        private variantStore: VariantStore
     ) { }
 
     addToCart(product) {
@@ -49,30 +52,20 @@ export class ProductDetailComponent {
                         };
                         this.albums.push(album);
 
-                        if (this.product.variants.length > 0) {
-                          this.product.selectedVariant = this.product.variants[0].options[0];
-                        }
+                        this.variantStore.setSelectedVariant(this.product);
+
                     }
                     else {
                         this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
                     }
-                    console.log(data);
                 });
         })
     }
 
     // Copied from ProductsComponent
     // How to reuse the parent component?
-    changeVariant(product): void {
-
-        product.selectedVariant = product.variants
-          .filter(function(variant) {
-            return variant.name === (<HTMLInputElement>event.target).name;
-          })[0].options
-          .filter(function(option) {
-           return option.name === (<HTMLInputElement>event.target).value;
-         })[0];
-
+    changeVariant(product) {
+        this.variantStore.changeVariant(product);
     }
 
     open(): void {

@@ -30,6 +30,8 @@ import { CartComponent } from './components/cart/cart.component';
 import { ProductService } from './services/product.service';
 import { reducer } from './store/reducers';
 import { CartStore } from './store/cart.store';
+// Product variant utilities
+import { VariantStore } from './store/variant.store';
 
 
 
@@ -62,7 +64,8 @@ import { CartStore } from './store/cart.store';
     AuthGuard,
     MainAuthService,
     ProductService,
-    CartStore
+    CartStore,
+    VariantStore
   ],
   bootstrap: [AppComponent]
 })

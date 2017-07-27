@@ -7,7 +7,7 @@ import { FlashMessagesService} from 'angular2-flash-messages'
 import { Product } from '../../models/product'; // currently unused
 import { ProductService } from '../../services/product.service';
 import { CartStore } from '../../store/cart.store';
-;
+import { VariantStore } from '../../store/variant.store';
 
 @Component({
   selector: 'app-products',
@@ -16,14 +16,15 @@ import { CartStore } from '../../store/cart.store';
 })
 export class ProductsComponent implements OnInit {
   
-  products: any[]; // Removed data type Product[]
+  products: Array<any> = []; // Removed data type Product[]
   quantity: number[];
   // private albums: Array<any> = [];
 
-  constructor (private productService:ProductService,
-               private router:Router, 
+  constructor (private productService: ProductService,
+               private router: Router, 
                private cartStore: CartStore,
-               private flashMessage: FlashMessagesService
+               private flashMessage: FlashMessagesService,
+               private variantStore: VariantStore
               //  private lightbox: Lightbox
               ) {
 }
@@ -49,9 +50,7 @@ export class ProductsComponent implements OnInit {
           this.products = data.product;
 
           this.products.forEach(function(product) {
-            if (product.variants.length > 0) {
-              product.selectedVariant = product.variants[0].options[0];
-            }
+            this.variantStore.setSelectedVariant(product);
           });
 
           console.log("All products: ", this.products);
@@ -74,17 +73,9 @@ export class ProductsComponent implements OnInit {
       })
   }
 
-  changeVariant(product): void {
-
-    product.selectedVariant = product.variants
-      .filter(function(variant) {
-        return variant.name === (<HTMLInputElement>event.target).name;
-      })[0].options
-      .filter(function(option) {
-       return option.name === (<HTMLInputElement>event.target).value;
-     })[0];
-
-  }
+  changeVariant(product) {
+    this.variantStore.changeVariant(product);
+   }
 
   // open(i): void {
   //   // open lightbox 
