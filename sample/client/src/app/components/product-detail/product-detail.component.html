@@ -1,23 +1,33 @@
-<div *ngIf="selectedProduct">
+<div *ngIf="product">
     
     <div class="col-md-6 well col-md-offset-3">
-            <span class="badge">{{selectedProduct.id}}</span> <strong>{{selectedProduct.name}}</strong>
-            <p>{{selectedProduct.desc}}</p>
+            <span class="badge">{{product.id}}</span> <strong>{{product.name}}</strong>
+            <p>{{product.desc}}</p>
             <p class="text-center">
-                <img class="image" width="400" height="300" src={{selectedProduct.image}} (click)="open()"/>
+                <img class="image" width="400" height="300" src={{product.image}} (click)="open()"/>
             </p>
+            <div class="row variants">
+                <div *ngFor="let variant of product.variants">
+                    {{variant.name}}:&nbsp;
+                    <select (change)="changeVariant(product)" class="select-variant" name="{{variant.name}}">
+                        <option *ngFor="let opt of variant.options">{{opt.name}}</option>
+                    </select>
+                </div>
+            </div>
             <div class="row">
-
                 <div class="col-md-6 col-md-offset-3">
                     <label for="qtyInput">Quantity</label>
                     <input type="number" min="0" class="form-control" id="qtyInput" [(ngModel)]="quantity">
                 </div>
-
             </div>
             <hr>
             <div class="row">
-                <h1 class="badge">${{selectedProduct.price}}</h1>
-                <button (click)="addToCart(selectedProduct)" class="btn btn-md btn-primary">Add to Cart</button>
+                <h1 class="badge">
+                    ${{product.selectedVariant ? product.selectedVariant.price : product.price}}
+                </h1>
+
+
+                <button (click)="addToCart(product)" class="btn btn-md btn-primary">Add to Cart</button>
                 <button (click)="goBack()" class="btn btn-md btn-danger">BACK</button>
             </div>
     </div>

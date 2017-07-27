@@ -51,7 +51,7 @@ export class ProductsComponent implements OnInit {
           this.products.forEach(function(product) {
             if (product.variants.length > 0) {
               product.selectedVariant = product.variants[0].options[0];
-              }
+            }
           });
 
           console.log("All products: ", this.products);
@@ -83,8 +83,6 @@ export class ProductsComponent implements OnInit {
       .filter(function(option) {
        return option.name === (<HTMLInputElement>event.target).value;
      })[0];
-
-    console.log(product.selectedVariant); //debugging
 
   }
 

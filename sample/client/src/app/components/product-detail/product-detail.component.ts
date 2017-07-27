@@ -15,7 +15,7 @@ import { CartStore } from '../../store/cart.store';
 })
 
 export class ProductDetailComponent {
-    selectedProduct: Product;
+    product: any = {};
     quantity: number;
     private albums: Array<any> = [];
 
@@ -37,23 +37,42 @@ export class ProductDetailComponent {
             let id = parseInt(param['id']);
             // // get data from file 
             // this.productService.getProduct(id)
-            //     .then(product => this.selectedProduct = product)
+            //     .then(product => this.product = product)
             this.productService.getProductFromServer(id)
                 .subscribe(data => {
                     if (data){
-                        this.selectedProduct = data.product;
+                        this.product = data.product;
                         const album = {
                             image: data.product.image,
                             caption: data.product.name,
                             thumb: data.product.thumb
                         };
                         this.albums.push(album);
-                        }else{
-                            this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
+
+                        if (this.product.variants.length > 0) {
+                          this.product.selectedVariant = this.product.variants[0].options[0];
                         }
-                        console.log(data);
+                    }
+                    else {
+                        this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
+                    }
+                    console.log(data);
                 });
         })
+    }
+
+    // Copied from ProductsComponent
+    // How to reuse the parent component?
+    changeVariant(product): void {
+
+        product.selectedVariant = product.variants
+          .filter(function(variant) {
+            return variant.name === (<HTMLInputElement>event.target).name;
+          })[0].options
+          .filter(function(option) {
+           return option.name === (<HTMLInputElement>event.target).value;
+         })[0];
+
     }
 
     open(): void {
