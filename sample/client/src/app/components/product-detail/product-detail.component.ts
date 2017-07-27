@@ -55,6 +55,7 @@ export class ProductDetailComponent {
                         this.variantStore.setSelectedVariant(this.product);
 
                     }
+
                     else {
                         this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
                     }
@@ -62,8 +63,6 @@ export class ProductDetailComponent {
         })
     }
 
-    // Copied from ProductsComponent
-    // How to reuse the parent component?
     changeVariant(product) {
         this.variantStore.changeVariant(product);
     }

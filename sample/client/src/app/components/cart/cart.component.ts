@@ -28,13 +28,18 @@ export class CartComponent {
     this.cartStore.removeFromCart(product)
   }
 
+  variants(cart) {
+    return cart.filter(item =>
+      item.selectedVariant).length;
+  }
+
   getTotalPrice() {
     let totalCost: Array<number> = [];
     let quantity: Array<number> = [];
     let intPrice: number;
     let intQuantity: number;
     this.cart.forEach((item, i) => {
-      intPrice = parseInt(item.price);
+      intPrice = parseInt(item.selectedVariant ? item.selectedVariant.price : item.price);
       intQuantity = parseInt(item.quantity);
       totalCost.push(intPrice);
       quantity.push(intQuantity);

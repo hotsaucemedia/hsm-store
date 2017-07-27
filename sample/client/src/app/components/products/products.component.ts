@@ -26,8 +26,7 @@ export class ProductsComponent implements OnInit {
                private flashMessage: FlashMessagesService,
                private variantStore: VariantStore
               //  private lightbox: Lightbox
-              ) {
-}
+              ) { }
   
   clickedProduct(product) {
       this.router.navigate(['/product-detail', product.id]);
@@ -49,7 +48,7 @@ export class ProductsComponent implements OnInit {
           // this.flashMessage.show(data.msg, {cssClass: 'alert-info', timeout: 2000});
           this.products = data.product;
 
-          this.products.forEach(function(product) {
+          this.products.forEach(product => {
             this.variantStore.setSelectedVariant(product);
           });
 
