@@ -12,6 +12,7 @@ import { UserService } from '../../services/user.service';
 export class CartComponent {
 
   public cart = [];
+  public lineItems = []; // in progress
   public totalPrice: number;
   public totalQuantity: number;
   public cartSubscription: Subscription;
@@ -31,6 +32,38 @@ export class CartComponent {
   variants(cart) {
     return cart.filter(item =>
       item.selectedVariant).length;
+  }
+
+  // In progress
+  getLineItems() {
+    let cartCopy = JSON.parse(JSON.stringify(this.cart)); // deep copy
+
+    // Only one loop necessary?
+    cartCopy.forEach(item => {
+      if (this.lineItems.length > 0) {
+        this.lineItems.forEach((line) => {
+          let variants = item.selectedVariant && line.selectedVariant;
+
+          // Logic flawed: debug
+          if (
+            !variants && item.id === line.id
+              ||
+            variants && item.id === line.id && item.selectedVariant.id === line.selectedVariant.id
+          ) {
+            line.quantity += item.quantity;
+          }
+          else {
+            this.lineItems.push(item);
+          }
+
+        });
+      }
+      else {
+        this.lineItems.push(item);
+      }
+    });
+
+    console.log(this.lineItems);
   }
 
   getTotalPrice() {
@@ -65,6 +98,7 @@ export class CartComponent {
   ngOnInit() {
     this.cartSubscription = this.cartStore.getState().subscribe(res => {
       this.cart = res.products;
+      this.getLineItems();
       this.getTotalPrice();
     });
     if(this.cart.length>0){

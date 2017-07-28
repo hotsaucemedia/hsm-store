@@ -7,7 +7,7 @@ import { FlashMessagesService} from 'angular2-flash-messages'
 import { Product } from '../../models/product'; // currently unused
 import { ProductService } from '../../services/product.service';
 import { CartStore } from '../../store/cart.store';
-import { VariantStore } from '../../store/variant.store';
+import { VariantUtils } from '../../lib/variant-utils';
 
 @Component({
   selector: 'app-products',
@@ -16,7 +16,7 @@ import { VariantStore } from '../../store/variant.store';
 })
 export class ProductsComponent implements OnInit {
   
-  products: Array<any> = []; // Removed data type Product[]
+  products: Product[];
   quantity: number[];
   // private albums: Array<any> = [];
 
@@ -24,7 +24,7 @@ export class ProductsComponent implements OnInit {
                private router: Router, 
                private cartStore: CartStore,
                private flashMessage: FlashMessagesService,
-               private variantStore: VariantStore
+               private variantUtils: VariantUtils
               //  private lightbox: Lightbox
               ) { }
   
@@ -34,8 +34,9 @@ export class ProductsComponent implements OnInit {
 
 
   addToCart(product) {
-    console.log(this.quantity)
-    this.cartStore.addToCart(product, this.quantity || 1)
+    // Copy prevents TypeError when changing product variant
+    let productCopy = JSON.parse(JSON.stringify(product));
+    this.cartStore.addToCart(productCopy, this.quantity || 1)
   }
 
   getProductData() {    
@@ -49,7 +50,7 @@ export class ProductsComponent implements OnInit {
           this.products = data.product;
 
           this.products.forEach(product => {
-            this.variantStore.setSelectedVariant(product);
+            this.variantUtils.setSelectedVariant(product);
           });
 
           console.log("All products: ", this.products);
@@ -73,7 +74,7 @@ export class ProductsComponent implements OnInit {
   }
 
   changeVariant(product) {
-    this.variantStore.changeVariant(product);
+    this.variantUtils.changeVariant(product);
    }
 
   // open(i): void {

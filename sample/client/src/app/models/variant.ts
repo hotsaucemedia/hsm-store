@@ -1,12 +1,8 @@
-import { Variant } from 'variant';
-
-export class Product {
+export class Variant {
     id?: number;
     name?: string;
     price?: number;
     desc?: string;
     image?: string;
     thumb?: string;
-    variants: Variant[];
-    selectedVariant?: Variant;
 }

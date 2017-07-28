@@ -31,7 +31,7 @@ import { ProductService } from './services/product.service';
 import { reducer } from './store/reducers';
 import { CartStore } from './store/cart.store';
 // Product variant utilities
-import { VariantStore } from './store/variant.store';
+import { VariantUtils } from './lib/variant-utils';
 
 
 
@@ -65,7 +65,7 @@ import { VariantStore } from './store/variant.store';
     MainAuthService,
     ProductService,
     CartStore,
-    VariantStore
+    VariantUtils
   ],
   bootstrap: [AppComponent]
 })

@@ -7,8 +7,7 @@ import { Lightbox, IAlbum } from 'angular2-lightbox';
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
 import { CartStore } from '../../store/cart.store';
-import { VariantStore } from '../../store/variant.store';
-
+import { VariantUtils } from '../../lib/variant-utils';
 
 @Component({
     selector: 'app-product-detail',
@@ -17,7 +16,7 @@ import { VariantStore } from '../../store/variant.store';
 })
 
 export class ProductDetailComponent {
-    product: any = {}; // removed datatype Product
+    product: Product;
     quantity: number;
     private albums: Array<any> = [];
 
@@ -28,10 +27,12 @@ export class ProductDetailComponent {
         private cartStore: CartStore,
         private flashMessage: FlashMessagesService,
         private lightbox: Lightbox,
-        private variantStore: VariantStore
+        private variantUtils: VariantUtils
     ) { }
 
     addToCart(product) {
+        // Copy prevents TypeError when changing product variant
+        let productCopy = JSON.parse(JSON.stringify(product)); // deep copy
         this.cartStore.addToCart(product, this.quantity || 1)
     }
 
@@ -52,7 +53,7 @@ export class ProductDetailComponent {
                         };
                         this.albums.push(album);
 
-                        this.variantStore.setSelectedVariant(this.product);
+                        this.variantUtils.setSelectedVariant(this.product);
 
                     }
 
@@ -64,7 +65,7 @@ export class ProductDetailComponent {
     }
 
     changeVariant(product) {
-        this.variantStore.changeVariant(product);
+        this.variantUtils.changeVariant(product);
     }
 
     open(): void {

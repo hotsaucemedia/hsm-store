@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class VariantStore {
+export class VariantUtils {
 
   changeVariant(product): void {
     product.selectedVariant = product.variants
@@ -11,6 +11,7 @@ export class VariantStore {
       .filter(function(option) {
         return option.name === (<HTMLInputElement>event.target).value;
        })[0];
+     console.log(product.selectedVariant.id);
     }
 
     setSelectedVariant(product): void {

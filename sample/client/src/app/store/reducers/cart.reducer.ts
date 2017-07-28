@@ -1,6 +1,5 @@
 import {Action} from '@ngrx/store';
 import {ActionTypes} from '../cart.store';
-console.log(ActionTypes)
 import {Product} from '../../models/product';
 
 export interface State {
@@ -26,7 +25,7 @@ export function reducer(state = initialState, action: Action): State {
         ]
       }
     }
-    
+
     case ActionTypes.REMOVE_FROM_CART: {
       //  return a new array excluding the product that needs to be removed
       let index = state.products.findIndex((product) => product.id === action.payload.id) 

@@ -15,18 +15,22 @@
       </thead>
 
       <tbody>
-        <tr *ngFor="let product of cart; let i = index">
+        <tr *ngFor="let product of lineItems; let i = index">
           <td><img src={{product.image}} width="50" height="50" /></td>
           <td><h4>{{product.name}}</h4></td>
           <th *ngIf="variants(cart) > 0">{{product.selectedVariant ? product.selectedVariant.name : ""}}</th>
           <td><h4>${{product.selectedVariant ? product.selectedVariant.price : product.price}}</h4></td>
-          <td><h4>{{product.quantity}}</h4></td>
+          <!--<td><h4>{{product.quantity}}</h4></td>-->
+          <td>
+            <input type="number" min="1" class="form-control" [(ngModel)]="product.quantity" (change)="getTotalPrice()" />
+          </td>
           <td><button (click)="removeProduct(product)" class="btn btn-xs btn-danger">Remove Product</button></td>
         </tr>
 
         <tr class="warning">
           <td><h4>Total Items: {{totalQuantity}}</h4></td>
-          <td><h4></h4></td>
+          <td></td>
+          <th *ngIf="variants(cart) > 0"></th>
           <td><h4>Total: ${{totalPrice}}</h4></td>
           <td></td>
           <td><button (click)="checkout()" class="btn btn-md btn-success" [disabled]="this.cartEmpty">Checkout</button></td>

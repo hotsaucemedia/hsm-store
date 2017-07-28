@@ -2,8 +2,8 @@ const bCrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const jwtSecret = require('../config/jwtSecret');
 
-const shopifyStore = require('../lib/shopify');
-const defaultStore = require('../lib/default');
+const shopifyStore = require('../../../lib/shopify-store');
+const defaultStore = require('../../../lib/default-store');
 
 module.exports = function(app, user, auth_user, product, variant, option) {
 	const User = user;
