@@ -26,7 +26,16 @@ export class CartComponent {
       }
 
   removeProduct(product) {
-    this.cartStore.removeFromCart(product)
+    let itemsToRemove = this.cart.filter(item => {
+      return product.selectedVariant && item.selectedVariant.id === product.selectedVariant.id ||
+        item.id === product.id;
+    });
+
+    this.lineItems.splice(this.lineItems.indexOf(product));
+
+    itemsToRemove.forEach(item => {
+      this.cartStore.removeFromCart(item);
+    });
   }
 
   variants(cart) {
@@ -34,36 +43,42 @@ export class CartComponent {
       item.selectedVariant).length;
   }
 
-  // In progress
   getLineItems() {
     let cartCopy = JSON.parse(JSON.stringify(this.cart)); // deep copy
 
-    // Only one loop necessary?
     cartCopy.forEach(item => {
       if (this.lineItems.length > 0) {
-        this.lineItems.forEach((line) => {
-          let variants = item.selectedVariant && line.selectedVariant;
 
-          // Logic flawed: debug
-          if (
-            !variants && item.id === line.id
-              ||
-            variants && item.id === line.id && item.selectedVariant.id === line.selectedVariant.id
-          ) {
-            line.quantity += item.quantity;
-          }
-          else {
-            this.lineItems.push(item);
-          }
-
+        let productHasVariants = item.selectedVariant;
+        let matchingProducts = this.lineItems.filter(line => {
+          return line.id === item.id;
         });
+        let productsMatch = matchingProducts.length > 0;
+        let matchingVariants = this.lineItems.filter(line => {
+          return line.id === item.id && line.selectedVariant && line.selectedVariant.id === item.selectedVariant.id;
+        });
+        let variantsMatch = matchingVariants.length > 0;
+
+        if (!productHasVariants && productsMatch) {
+          matchingProducts[0].quantity += item.quantity;
+        }
+        else if (productHasVariants && variantsMatch) {
+          matchingVariants[0].quantity += item.quantity;
+        }
+        else {
+          this.lineItems.push(item);
+        }
+
       }
       else {
         this.lineItems.push(item);
       }
     });
 
+    console.log('Line items:\n');
     console.log(this.lineItems);
+    console.log('Cart:\n');
+    console.log(this.cart);
   }
 
   getTotalPrice() {
