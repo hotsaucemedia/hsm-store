@@ -9,4 +9,5 @@ export class Product {
     thumb?: string;
     variants?: Variant[]; 
     selectedVariant?: Variant;
+    quantity?: number;
 }

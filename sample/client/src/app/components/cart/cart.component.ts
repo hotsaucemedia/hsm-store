@@ -27,14 +27,31 @@ export class CartComponent {
 
   removeProduct(product) {
     let itemsToRemove = this.cart.filter(item => {
-      return product.selectedVariant && item.selectedVariant.id === product.selectedVariant.id ||
-        item.id === product.id;
+      if (product.selectedVariant && item.selectedVariant) {
+        return item.selectedVariant.id === product.selectedVariant.id;
+      }
+
+      else {
+        return item.id === product.id;
+      }
     });
 
-    this.lineItems.splice(this.lineItems.indexOf(product));
+    console.log('Items to remove:\n');
+    console.log(itemsToRemove);
 
     itemsToRemove.forEach(item => {
       this.cartStore.removeFromCart(item);
+
+      let lineToRemove = this.lineItems.findIndex(line => {
+        if (line.selectedVariant && item.selectedVariant) {
+          return line.selectedVariant.id === item.selectedVariant.id;
+        }
+
+        else {
+          return line.id === item.id;
+        }
+      })
+      this.lineItems.splice(lineToRemove);
     });
   }
 
