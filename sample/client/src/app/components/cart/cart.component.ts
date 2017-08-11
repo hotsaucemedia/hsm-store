@@ -113,6 +113,23 @@ export class CartComponent {
       else {
         this.lineItems.push(item);
       }
+
+      // Alphabetize line items
+      this.lineItems.sort((a, b) => {
+          // Sort by product name ...
+          if (a.name !== b.name) {
+              if (a.name < b.name) return -1;
+              if (a.name > b.name) return 1;
+              return 0;
+          }
+          // ... or variant name
+          else {
+              if (a.selectedVariant.name < b.selectedVariant.name) return -1;
+              if (a.selectedVariant.name > b.selectedVariant.name) return 1;
+              return 0;
+          }
+      });
+
     });
 
     // Debugging
