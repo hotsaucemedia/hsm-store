@@ -53,6 +53,9 @@ import { CartStore } from './store/cart.store';
     MaterialModule,
     StoreModule.provideStore(reducer),
     StoreDevtoolsModule.instrumentOnlyWithExtension(),
+    StoreDevtoolsModule.instrumentStore({
+      maxAge: 5
+    }),
     LightboxModule
   ],
   providers: [

@@ -11,14 +11,14 @@ import { AppComponent }  from './app.component';
 import { ProductDetailComponent }  from './components/product-detail/product-detail.component';
 import { CartComponent }  from './components/cart/cart.component';
 
-
+ 
 export const appRoutes: Routes = [  
 	{ path: '', redirectTo: 'services', pathMatch: 'full' },
 	{ path: 'register', component: RegisterComponent },
 	{ path: 'login', component: LoginComponent },
 	{ path: 'services', component: ServicesComponent },
 	{ path: 'products', component: ProductsComponent },
-	{ path: 'product-detail/:id', component: ProductDetailComponent },
+	{ path: 'products/:id', component: ProductDetailComponent },
 	{ path: 'cart', component: CartComponent },
 	{ path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]  },
 	{ path: '**', redirectTo: 'services', pathMatch: 'full' }

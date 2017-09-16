@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { FlashMessagesService} from 'angular2-flash-messages'
-// import { Lightbox, IAlbum } from 'angular2-lightbox';
+import { Subscription } from 'rxjs/Subscription';
+
 
 import { Product } from '../../models/Product';
 import { ProductService } from '../../services/product.service';
 import { CartStore } from '../../store/cart.store';
-;
 
 @Component({
   selector: 'app-products',
@@ -16,9 +16,11 @@ import { CartStore } from '../../store/cart.store';
 })
 export class ProductsComponent implements OnInit {
   
-  products:Product[];
-  quantity: number[];
-  // private albums: Array<any> = [];
+  public products: Product[];
+  public quantity = Array();
+  public counter = Array();
+  private cartSubscription: Subscription;
+  private cart = [];
 
   
 
@@ -26,42 +28,41 @@ export class ProductsComponent implements OnInit {
                private router:Router, 
                private cartStore: CartStore,
                private flashMessage: FlashMessagesService
-              //  private lightbox: Lightbox
               ) {
 }
   
   clickedProduct(product) {
-      this.router.navigate(['/product-detail', product.id]);
+      this.router.navigate(['/products', product.id]);
   }
 
 
   addToCart(product) {
-    console.log(this.quantity)
-    this.cartStore.addToCart(product, this.quantity || 1)
+    console.log("product to add: ", product.id);
+    console.log("this.quantity[",product.id,"]:  ", this.quantity[product.name]);
+    
+    this.counter[product.name] += 1; 
+    this.cartStore.addToCart(product, this.quantity[product.name])
+    this.loadCart();
   }
 
   getProductData() {    
     //   // this is to load data from a file: 
     //  this.productService.getProducts().then(products => this.products = products);
-      // this is to load data from server 
+      // this is to load data from server
+
       this.productService.getProductsFromServer().subscribe(data => {
         console.log("Product DATA from server: ", data);
         if (data.success){
           // this.flashMessage.show(data.msg, {cssClass: 'alert-info', timeout: 2000});
-          this.products = data.products;
-          console.log("all products: ", data.products);
-          // for (let i = 0; i < data.products.length; i++) {
-          //   const src = data.products[i]['src'];
-          //   const caption = data.products[i]['name'];
-          //   const thumb = data.products[i]['thumb'];
-          //   const album = {
-          //     src: src,
-          //     caption: caption,
-          //     thumb: thumb
-          //   };
-          //   this.albums.push(album);
-          // }
-          // console.log("albums: ", this.albums);
+          this.products = data.products.slice(0);
+
+          data.products.forEach((element,i) => {
+            this.quantity[element.name] = 1;
+            this.products[i].unitPrice = element.price;          
+          });
+
+          console.log("all products: ", this.products);
+
         }else{
           this.flashMessage.show(data.msg, {cssClass: 'alert-danger', timeout: 2000});
         }
@@ -69,14 +70,27 @@ export class ProductsComponent implements OnInit {
       })
   }
 
-  // open(i): void {
-  //   // open lightbox 
-  //   this.lightbox.open(this.albums, i);
-  // }
+ 
+  loadCart(){
+  this.cartSubscription = this.cartStore.getState().subscribe(res => {
+    this.cart = res.products;
+  });
+  this.cart.forEach((cartItem,i) => {
+    this.counter[cartItem.name] = cartItem.quantity;
+  });
+  }
+
 
   ngOnInit() {
     // Get initial data from productService to display on the page
     this.getProductData();
+    this.loadCart();
+    // this.cart.forEach((cartItem,i) => {
+    //   this.counter[cartItem.name] = cartItem.quantity;
+    // });
+  
+    
+
   }
 
 }

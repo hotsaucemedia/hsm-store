@@ -26,10 +26,13 @@ export class ProductDetailComponent {
         private cartStore: CartStore,
         private flashMessage: FlashMessagesService,
         private lightbox: Lightbox
-    ) { }
+    ) {
+        console.log("PARAMS: ", this.route.snapshot.params['id']); 
+     }
 
     addToCart(product) {
-        this.cartStore.addToCart(product, this.quantity || 1)
+        // this.cartStore.addToCart(product, this.quantity || 1)
+        this.cartStore.addToCart(product,this.quantity)
     }
 
     ngOnInit() {

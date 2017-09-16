@@ -18,7 +18,7 @@ import { compose } from '@ngrx/core/compose';
  * ensure that none of the reducers accidentally mutates the state.
  */
 import { storeFreeze } from 'ngrx-store-freeze';
-import {storeLogger} from "ngrx-store-logger";
+import { storeLogger } from "ngrx-store-logger";
 
 /**
  * combineReducers is another useful metareducer that takes a map of reducer

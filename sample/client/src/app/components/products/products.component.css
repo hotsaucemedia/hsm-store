@@ -1,87 +1,155 @@
-.container{
-    padding-top: 50px;
-}
-img{
-    display: flex;
-    margin-left: auto;
-    margin-right: auto;
-}
-.priceTag{
-    position: center;
-    padding: 5px;
+    body {
+        margin: 0;
+        padding: 0;
+        background: #EEE;
+        font: 10px/13px 'Lucida Sans',sans-serif;
 
-}
-md-card{
-    margin: 5px;
-}
+     } 
+     /* Here's the "wrapper" that will hold all of our products. */
+     .wrap {
+        overflow: hidden;
+        margin: 10px;
+     }
+     .productBox {
+        /* The float creates the grid, by ensuring that products are automatically laid out in rows. */
+        float: left; 
+        /* The relative positioning, used in conjunction with position:absolute on boxInner, makes 
+        the boxes remain square regardless of content.*/
+        position: relative;
+        /* The width and padding-bottom are what determine the size of the box and make it square. */
+        width: 25%;
+        padding-bottom: 30%;
+     }
+     /* This is the actual content area for each product.  
+        It is positioned with 10 pixels around each edge and 40 from bottom. */
+     .boxInner {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        top: 20px;
+        bottom: 0px;
+        overflow: hidden;
+     }
+     .boxInner img {
+        /* We want our images to fill the full tile width, so we use width:100% */
+        clear: left;
+        width: 75%; 
+        display: block;
+        margin: auto;
+     }
+     .boxInner .counter{
+        /* position: absolute; */
+        top: 10px;
+        left: 0;
+        right: 0;
+        /* We set a partially-transparent background along with some padding: */
+        background: rgba(0, 252, 78, 0.2);
+        color: #070808;
+        margin-top: 0px;
+        float: left;
+        /* writing-mode: tb-rl; */
 
-.glyphicon { margin-right:5px; }
-.thumbnail
-{
-    margin-bottom: 20px;
-    padding: 0px;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    border-radius: 0px;
-}
+     }
+     /* The caption goes at the bottom of each tile*/
+     .boxInner .caption {
+        position: absolute;
+        bottom: 35px;
+        left: 0;
+        right: 0;
+        /* We set a partially-transparent background along with some padding: */
+        /* background: rgba(0, 0, 0, 0.02); */
+        color: #000;
+        margin-bottom: -10px;
+        /* padding: -25px; */
+        text-align: center;
+        
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+       
+        /* We specify a CSS3 transition to use when showing/hiding the text box: */
+        -webkit-transition: all 0.3s ease-out;
+        -moz-transition: all 0.3s ease-out;
+        -o-transition: all 0.3s ease-out;
+        transition: all 0.3s ease-out;
+     }
+     /* The buttons go at the bottom of each tile*/
+     .boxInner .button {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        margin-bottom: -10px;
+        padding: 0px;
+        text-align: center;
+        -webkit-transition: all 0.3s ease-out;
+        -moz-transition: all 0.3s ease-out;
+        -o-transition: all 0.3s ease-out;
+        transition: all 0.3s ease-out;
+     }
 
-.item.list-group-item
-{
-    float: none;
-    width: 100%;
-    background-color: #fff;
-    margin-bottom: 10px;
-}
-.item.list-group-item:nth-of-type(odd):hover,.item.list-group-item:hover
-{
-    background: #428bca;
-}
+         
+     /* .boxInner .button:hover{
+        margin-bottom: 5px;
+     } */
 
-.item.list-group-item .list-group-image
-{
-    margin-right: 10px;
-}
-.item.list-group-item .thumbnail
-{
-    margin-bottom: 0px;
-}
-.item.list-group-item .caption
-{
-    padding: 9px 9px 0px 9px;
-}
-.item.list-group-item:nth-of-type(odd)
-{
-    background: #eeeeee;
-}
+     .btn{
+        display: inline-block;
+        /* height: 25px; */
+        margin: 0px;
+    }
 
-.item.list-group-item:before, .item.list-group-item:after
-{
-    display: table;
-    content: " ";
-}
+    .btn-success{
+        float:left;
+    }
+    .btn-primary{
+        float: right;
+    }
+    .title h6, p{
+        display: inline-block;
+        padding: 5px;
+    }
+    h6.name{
+        float:left;
+    }
+    h6.price{
+        float: right;
+    }
+    /* Here are our media queries to "snap" the number of tiles per row: */
+     @media only screen and (max-width : 480px) {
+        /* Smartphone view: 1 tile */
+        .productBox {
+           width: 100%;
+           padding-bottom: 100%;
+        }
+     }
+     @media only screen and (max-width : 650px) and (min-width : 481px) {
+        /* Tablet view: 2 tiles */
+        .productBox {
+           width: 50%;
+           padding-bottom: 50%;
+        }
+     }
+     @media only screen and (max-width : 1050px) and (min-width : 651px) {
+        /* Small desktop / ipad view: 3 tiles */
+        .productBox {
+           width: 33.3%;
+           padding-bottom: 33.3%;
+        }
+     }
+     @media only screen and (max-width : 1290px) and (min-width : 1051px) {
+        /* Medium desktop: 4 tiles */
+        .productBox {
+           width: 25%;
+           padding-bottom: 25%;
+        }
+     }
+     .list-group-image {
+        font-size: 2em;
+        transition: transform .3s ease-out;
+    }
+     .list-group-image:hover{
+        transform: translate(0, -5px);
+    }
 
-.item.list-group-item img
-{
-    float: left;
-}
-.item.list-group-item:after
-{
-    clear: both;
-}
-.list-group-item-text
-{
-    margin: 0 0 11px;
-    min-height: 130px;
-
-}
-
-.list-group-image {
-  font-size: 2em;
-  transition: transform .3s ease-out;
-  display: inline-block;
-}
-
-.list-group-image:hover{
-    transform: translate(0, -5px);
-}
-	
+ 

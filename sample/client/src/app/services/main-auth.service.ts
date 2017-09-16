@@ -127,6 +127,7 @@ export class MainAuthService {
 	// 	return this.http.post('http://localhost:3000/users/auth/social', user, {headers: headers})
 	// 		.map(res => res.json());
 	// }
+	
 
 	getProfile(token){
 		let headers = new Headers();

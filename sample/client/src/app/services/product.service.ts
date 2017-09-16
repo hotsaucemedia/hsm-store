@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PRODUCTS } from '../models/product-data';
+// import { PRODUCTS } from '../models/product-data';
 import { Product } from '../models/Product'; 
 // import { Observable, Subject } from 'rxjs';
 
@@ -18,15 +18,15 @@ export class ProductService {
     }
 
 // to get all data from file:
-    getProducts() {
-        return Promise.resolve(PRODUCTS);
-    }
+    // getProducts() {
+        // return Promise.resolve(PRODUCTS);
+    // }
 
 // to get specific data from file 
-    getProduct(id) {
-        return this.getProducts()
-            .then(products => products.find(product => product.id === id));
-    }
+    // getProduct(id) {
+    //     return this.getProducts()
+    //         .then(products => products.find(product => product.id === id));
+    // }
 
 
 // to get specific data from server
