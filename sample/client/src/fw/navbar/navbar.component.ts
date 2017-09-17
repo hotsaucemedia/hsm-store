@@ -38,7 +38,7 @@ export class NavbarComponent implements OnInit {
     let intQuantity: number
 
     this.cart.products.forEach((item, i) => {
-      intPrice = parseInt(item.price)
+      intPrice = parseFloat(item.price)
       intQuantity = parseInt(item.quantity)
       totalCost.push(intPrice)
       quantity.push(intQuantity)

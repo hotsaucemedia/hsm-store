@@ -107,3 +107,7 @@ body {
          padding-bottom: 25%;
       }
    }
+
+   .productDesc{
+     text-align: left;
+   }

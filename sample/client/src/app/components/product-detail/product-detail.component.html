@@ -12,12 +12,12 @@
             <p>{{selectedProduct.desc}}</p>
         </div>
         <div class="productQty">
-            <input type="number" min="1" class="form-control" id="qtyInput" [(ngModel)]="quantity" placeholder="Quantity">
+            <input type="number" min="1" class="form-control" id="qtyInput" [(ngModel)]="quantity" placeholder="Quantity"> 
         </div>
         <div class="productButton">
             <hr>
             <div class="row">
-                <button (click)="addToCart(selectedProduct)" class="btn btn-md btn-success">Add to Cart</button>
+                <button (click)="addToCart(selectedProduct)" class="btn btn-md btn-success" [class.disabled]="quantity==null" >Add to Cart</button>
                 <button (click)="goBack()" class="btn btn-md btn-danger">BACK</button>
             </div>
         </div>

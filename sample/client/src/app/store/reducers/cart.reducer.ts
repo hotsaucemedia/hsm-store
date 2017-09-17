@@ -32,7 +32,7 @@ export function reducer(state = initialState, action: Action): State {
         console.log("QTY: ", quantity);
         addProduct.quantity = action.payload.quantity + quantity;
         addProduct.unitPrice = addProduct.price;
-        addProduct.subTotalPrice = (parseInt(addProduct.unitPrice) * parseInt(addProduct.quantity)).toFixed(2);
+        addProduct.subTotalPrice = (parseFloat(addProduct.unitPrice) * parseInt(addProduct.quantity)).toFixed(2);
         console.log("ADD PROD: ", addProduct);
         return {
           ...state,
@@ -45,7 +45,7 @@ export function reducer(state = initialState, action: Action): State {
       }else{
         addProduct.quantity = action.payload.quantity,
         console.log("QTY: ",  addProduct.quantity);
-        addProduct.subTotalPrice = (parseInt(addProduct.unitPrice) * parseInt(addProduct.quantity)).toFixed(2);
+        addProduct.subTotalPrice = (parseFloat(addProduct.unitPrice) * parseInt(addProduct.quantity)).toFixed(2);
         console.log("add product: ", addProduct );
         return {
           ...state,
@@ -103,7 +103,7 @@ export function reducer(state = initialState, action: Action): State {
       console.log ("updated product: ", updatedProduct);
 
       updatedProduct.quantity = action.payload.quantity;
-      updatedProduct.subTotalPrice = (parseInt(updatedProduct.unitPrice) * parseInt(updatedProduct.quantity)).toFixed(2);
+      updatedProduct.subTotalPrice = (parseFloat(updatedProduct.unitPrice) * parseInt(updatedProduct.quantity)).toFixed(2);
       return {
         ...state,
         products : [

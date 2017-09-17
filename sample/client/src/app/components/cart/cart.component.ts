@@ -1,4 +1,7 @@
 import { Component, OnChanges } from '@angular/core';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+
 import { ProductService } from '../../services/product.service';
 import { CartStore } from '../../store/cart.store';
 import { Subscription } from 'rxjs/Subscription';
@@ -21,6 +24,8 @@ export class CartComponent {
   constructor(
           private productService: ProductService,
           private cartStore: CartStore,
+          private location:Location,
+          private router: Router,
           private userService: UserService
       ) {
       }
@@ -31,17 +36,21 @@ export class CartComponent {
     this.getTotalPrice();
   }
 
+  getProductDetails(product) {
+    this.router.navigate(['/products', product.id]);
+}
+
   getTotalPrice() {
     let subTotalCost: Array<number> = [];
-    let intPrice: number=0;
+    let unitPrice: number=0;
     let intQuantity: number=0;
     this.totalQuantity = 0;
     this.quantity = [];
     this.cart.forEach((item, i) => {
       console.log("ITEM: ", item);
-      intPrice = parseInt(item.unitPrice);
+      unitPrice = parseFloat(item.unitPrice);
       intQuantity = parseInt(item.quantity);
-      subTotalCost.push(intPrice * intQuantity);
+      subTotalCost.push(unitPrice * intQuantity);
       this.quantity.push(intQuantity);
     })
     console.log("sub total costs: ", subTotalCost);
@@ -49,8 +58,10 @@ export class CartComponent {
     
     
     this.totalPrice = subTotalCost.reduce((prev, cur) => {
-      return prev + cur
+      return (prev + cur)
     }, 0)
+    this.totalPrice = Number((this.totalPrice).toFixed(2));
+
     console.log("TOTAL PRICE: ", this.totalPrice)
     this.totalQuantity = this.quantity.reduce((prev, cur) => {
       return prev + cur
@@ -95,5 +106,9 @@ export class CartComponent {
   ngOnDestroy() {
     this.cartSubscription.unsubscribe();
   }
+
+  goBack() {
+    this.location.back()
+}
   
 }
