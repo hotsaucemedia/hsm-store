@@ -49,7 +49,7 @@ models.sequelize.sync().then(() => {
 });
 
 // importing routes and passing passport as auth.js need it
-const authRoute = require('./routes/routes.js')(app, models.user, models.auth_user, models.product);
+const authRoute = require('./routes/routes.js')(app, models.user, models.auth_user, models.product, models.payment);
 
 // statring server
 app.listen(port, (err) => {

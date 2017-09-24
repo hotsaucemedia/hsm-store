@@ -11,6 +11,7 @@ import { LightboxModule } from 'angular2-lightbox';
 
 import { AppComponent } from './app.component';
 import { FwModule } from '../fw/fw.module';
+import { PaymentModule } from './payments/payment.module';
 import { ServicesComponent } from './components/services/services.component';
 import { ProductsComponent } from './components/products/products.component';
 import { appRoutes } from './app.routing';
@@ -48,6 +49,7 @@ import { CartStore } from './store/cart.store';
     HttpModule,
     FlashMessagesModule,
     FwModule,
+    PaymentModule,
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule,
     MaterialModule,

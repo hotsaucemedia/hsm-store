@@ -6,11 +6,13 @@ import { ProductService } from '../../services/product.service';
 import { CartStore } from '../../store/cart.store';
 import { Subscription } from 'rxjs/Subscription';
 import { UserService } from '../../services/user.service';
+import { MakePaymentComponent } from '../../payments/make-payment/make-payment.component';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
+  providers: [MakePaymentComponent],
 })
 export class CartComponent {
 
@@ -26,7 +28,8 @@ export class CartComponent {
           private cartStore: CartStore,
           private location:Location,
           private router: Router,
-          private userService: UserService
+          private userService: UserService,
+          private makePayment: MakePaymentComponent
       ) {
       }
 
@@ -80,7 +83,8 @@ export class CartComponent {
 
   checkout() {
     if (this.userService.isLoggedIn()){
-      alert('Under construction!');
+      // alert('Under construction!');
+      this.makePayment.handlePayment()
     }else{
       alert('You must login first!');
     }

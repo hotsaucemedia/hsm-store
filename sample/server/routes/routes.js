@@ -2,10 +2,11 @@ const bCrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const jwtSecret = require('../config/jwtSecret');
 
-module.exports = function(app, user, auth_user, product){
+module.exports = function(app, user, auth_user, product, payment){
 	const User = user;
   const Auth_user = auth_user;
-	const Product = product;
+  const Product = product;
+  const Payment = payment;
 
 
   // login section
@@ -404,6 +405,40 @@ function sendUserToClient(user, msg, res){
 			  console.log("###### Error : ", err);												
     });
   })
+
+    // payment data entry
+	app.post("/payments", function(req, res) {
+    console.log("payment data from client: ", req.body);
+    const payment = {
+                token 		    : req.body.token,
+                amount    	  : req.body.amount,
+                user_id 	    : req.body.user_id    
+                };
+
+    // // testing charges!
+    // var charge = stripe.charges.create({
+    //   amount: 100, 
+    //   currency: "cad",
+    //   source: req.body.token,
+    //   description: "payinguser@example.com"
+    // }, function (err, charge) {
+    //   if (err && err.type === 'StripeCardError') {
+    //   }
+    // });
+
+  
+    return Payment.create(payment).then(function(newPayment, created){
+      if(!newPayment){
+        return res.json({success: false, msg: 'Failed to add new payment to the database!'});
+      }else{
+        return res.json({success: true, msg: 'The new payment is added to the database!'});
+      }
+    }).catch((err) => {
+      return res.json({success: false, msg:'Something went wrong while registering the payment in the database!'});
+    });
+  });
+
+  
 
 function sendProductToClient(product, msg, res){
   return res.json({ success: true,

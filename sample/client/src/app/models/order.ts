@@ -3,7 +3,7 @@ import { Address } from './address';
 import { ShoppingCart } from './shopping-cart';
 
 
-export class Product {
+export class Order {
     id?: number;
     user_id?: number;
     created_at?: Date;
