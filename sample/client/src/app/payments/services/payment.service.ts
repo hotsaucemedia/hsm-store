@@ -22,33 +22,34 @@ export class PaymentService {
     console.log('PAYMENT: ', payment)
 
     
-    this.registerPayment(payment)
-      .subscribe((data) => {
-        console.log("Data back from server: ", data);
-        if (data.success){
-          console.log("data.msg")
-        }else{
-          console.log("data.msg")
-        } 
-    
-      },
-      (err)=> {
-        console.log('got error: ', err);
-      }
-    );
+
+      let headers = new Headers();
+      headers.append('Content-Type', 'application/json');
+      return this.http.post('http://localhost:3000/payments', payment, {headers: headers})
+        .map(res => res.json()).subscribe((data) => {
+          console.log("Data back from server: ", data);
+          if (data.success){
+            console.log("data.msg")
+          }else{
+            console.log("data.msg")
+          } 
+      
+        },
+        (err)=> {
+          console.log('got error: ', err);
+        }
+      );
+  
+      
 
     }
 
-    
-
-
-  
-  registerPayment(payment){
-    let headers = new Headers();
-		headers.append('Content-Type', 'application/json');
-		return this.http.post('http://localhost:3000/payments', payment, {headers: headers})
-			.map(res => res.json());
-  }
+  // registerPayment(payment){
+  //   let headers = new Headers();
+	// 	headers.append('Content-Type', 'application/json');
+	// 	return this.http.post('http://localhost:3000/payments', payment, {headers: headers})
+	// 		.map(res => res.json());
+  // }
 }
 
 

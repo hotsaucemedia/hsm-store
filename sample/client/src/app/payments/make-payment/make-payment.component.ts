@@ -1,6 +1,11 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { PaymentService } from '../services/payment.service';
 import { environment } from '../../../environments/environment';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+
+import { UserService } from '../../services/user.service';
+import { CartStore } from '../../store/cart.store';
 
 @Component({
   selector: 'app-make-payment',
@@ -10,9 +15,12 @@ import { environment } from '../../../environments/environment';
 export class MakePaymentComponent implements OnInit {
 
   handler: any;
-  amount = 100;
+  amount: number;
 
-  constructor(private paymentService: PaymentService ) { }
+  constructor(private paymentService: PaymentService,
+              private userService: UserService,
+              private cartStore: CartStore
+             ) { }
 
   ngOnInit() {
     this.handler = StripeCheckout.configure({
@@ -26,11 +34,20 @@ export class MakePaymentComponent implements OnInit {
     });
   }
   handlePayment() {
-    this.handler.open({
+    if (this.userService.isLoggedIn()){
+      
+      this.cartStore.getState().subscribe(res => {
+        this.amount = res.total*100;
+      });
+
+      this.handler.open({
       name: 'HSM online payment',
       description: 'Deposit to Account',
       amount: this.amount
-    });
+      });
+    }else{
+        alert('You must login first!');
+      }
   }
   @HostListener('window:popstate')
     onPopstate() {

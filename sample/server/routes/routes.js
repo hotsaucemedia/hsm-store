@@ -1,6 +1,7 @@
 const bCrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const jwtSecret = require('../config/jwtSecret');
+const config = require('../config/config');
+const stripe = require('stripe')(config.stripeKey);
 
 module.exports = function(app, user, auth_user, product, payment){
 	const User = user;
@@ -76,7 +77,7 @@ module.exports = function(app, user, auth_user, product, payment){
       if(user){
         console.log("@@@@@@@@@@@ executing user.get");
         const userInfo = user.get();
-        const token = jwt.sign(userInfo, jwtSecret.secret, {
+        const token = jwt.sign(userInfo, config.secret, {
           expiresIn: 3000
         });
         req.msg = "You are successfully logged in using Facebook (as before)!";
@@ -118,7 +119,7 @@ module.exports = function(app, user, auth_user, product, payment){
                   return User.update(data, { where: { email : req.body.email } }).then(function(){
                     console.log("@@@@@@@@@@@ executing user.get");
                     const userInfo = user.get();
-                    const token = jwt.sign(userInfo, jwtSecret.secret, {
+                    const token = jwt.sign(userInfo, config.secret, {
                       expiresIn: 3000
                     });
                     req.msg = "You are successfully logged in using Facebook. (new Facebook relogin)";
@@ -146,7 +147,7 @@ module.exports = function(app, user, auth_user, product, payment){
                     return User.update(data, { where: { email : req.body.email } }).then(function(){
                       console.log("@@@@@@@@@@@ executing user.get");
                       const userInfo = user.get();
-                      const token = jwt.sign(userInfo, jwtSecret.secret, {
+                      const token = jwt.sign(userInfo, config.secret, {
                         expiresIn: 3000
                       });
                       req.msg = "You are successfully logged in using Facebook. (first Facebook login)";
@@ -199,7 +200,7 @@ module.exports = function(app, user, auth_user, product, payment){
                     console.log("NEW USER: ", newUser);
                     const userInfo = newUser.get();
                     console.log("STRINGIFIED NEW USER: ", userInfo)
-                    const token = jwt.sign(userInfo, jwtSecret.secret, {
+                    const token = jwt.sign(userInfo, config.secret, {
                       expiresIn: 3000
                     });
                     req.msg = "You are successfully logged in using Facebook. (first login ever)";
@@ -349,7 +350,7 @@ module.exports = function(app, user, auth_user, product, payment){
   });
 
 function sendUserToClient(user, msg, res){
-  const token = jwt.sign(user, jwtSecret.secret, {
+  const token = jwt.sign(user, config.secret, {
     expiresIn: 3000  
   });
   user.password = null;
@@ -365,7 +366,7 @@ function sendUserToClient(user, msg, res){
 	app.get('/users/profile', function(req, res, next) {
     console.log("Header authorization from client: ", req.headers.authorization);
     let str = req.headers.authorization;
-    jwt.verify(str.substring(4), jwtSecret.secret, function(err, user) {
+    jwt.verify(str.substring(4), config.secret, function(err, user) {
       if(!err){
         console.log("decoded user: ", user);
         //check it....................................TODO
@@ -377,7 +378,7 @@ function sendUserToClient(user, msg, res){
 
 
 
-  app.get('/product-detail/:id', function(req,res){
+  app.get('/product-detail/:id', function(req,res,next){
     console.log("REQ>PARAM: ", req.params.id );
     Product.findOne({where: {id: req.params.id}}).then((product) => {
       if (!product){
@@ -406,36 +407,41 @@ function sendUserToClient(user, msg, res){
     });
   })
 
-    // payment data entry
-	app.post("/payments", function(req, res) {
+  // payment data entry
+	app.post("/payments", (req, res) => {
     console.log("payment data from client: ", req.body);
     const payment = {
                 token 		    : req.body.token,
                 amount    	  : req.body.amount,
                 user_id 	    : req.body.user_id    
                 };
-
-    // // testing charges!
-    // var charge = stripe.charges.create({
-    //   amount: 100, 
-    //   currency: "cad",
-    //   source: req.body.token,
-    //   description: "payinguser@example.com"
-    // }, function (err, charge) {
-    //   if (err && err.type === 'StripeCardError') {
-    //   }
-    // });
-
-  
-    return Payment.create(payment).then(function(newPayment, created){
-      if(!newPayment){
-        return res.json({success: false, msg: 'Failed to add new payment to the database!'});
-      }else{
-        return res.json({success: true, msg: 'The new payment is added to the database!'});
-      }
-    }).catch((err) => {
-      return res.json({success: false, msg:'Something went wrong while registering the payment in the database!'});
+    // testing charges!
+    const charge2 = stripe.charges.create({
+      amount: req.body.amount,
+      currency: "cad",
+      description: "Example charge",
+      // source: "test"
+      source: req.body.token
+    }, (err, charge) => {  
+      console.log("Entered ChargeCreate Callback Function!");       
+        if (err && err.type === 'StripeCardError') {
+          console.log("ERRORRRRRRRRRRRR: ", err);
+        }
+        if(err){
+          console.log("CHARGE is NULL!", err);
+        } 
+      console.log("CHARGE: ", charge);
+      return Payment.create(payment).then(function(newPayment, created){
+        if(!newPayment){
+          return res.json({success: false, msg: 'Failed to add new payment to the database!'});
+        }else{
+          return res.json({success: true, msg: 'The new payment is added to the database!'});
+        }
+      }).catch((err) => {
+        return res.json({success: false, msg:'Something went wrong while registering the payment in the database!'});
+      });
     });
+    
   });
 
   

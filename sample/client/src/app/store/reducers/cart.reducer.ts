@@ -11,10 +11,12 @@ import { CartStore } from '../../store/cart.store';
 export interface State {
   // order: Array<Orders>;
   products: Array<Product>;
+  total: number;
 }
 
 const initialState: State = {
-  products: []
+  products: [],
+  total: 0
 };
 
 export function reducer(state = initialState, action: Action): State {
@@ -40,7 +42,8 @@ export function reducer(state = initialState, action: Action): State {
             ...state.products.slice(0, index),
             ...state.products.slice(index + 1),
             addProduct
-          ]
+          ],
+          total: state.total + addProduct.unitPrice
         }
       }else{
         addProduct.quantity = action.payload.quantity,
@@ -52,7 +55,8 @@ export function reducer(state = initialState, action: Action): State {
           products: [
             ...state.products,
             addProduct  
-          ]
+          ],
+          total: state.total + addProduct.unitPrice
         }
       }
     }

@@ -70,6 +70,7 @@ export class CartComponent {
       return prev + cur
     }, 0)
     console.log("TOTAL QTY: ", this.quantity)
+    // this.cart['total'] = this.totalPrice
   }
 
   updateCart(product) {
@@ -81,15 +82,14 @@ export class CartComponent {
   }
 
 
-  checkout() {
-    if (this.userService.isLoggedIn()){
-      // alert('Under construction!');
-      this.makePayment.handlePayment()
-    }else{
-      alert('You must login first!');
-    }
-    
-  }
+  // checkout() {
+  //   if (this.userService.isLoggedIn()){
+  //     // alert('Under construction!');
+  //     // this.makePayment.handlePayment(this.totalPrice)
+  //   }else{
+  //     alert('You must login first!');
+  //   }
+  // }
 
   ngOnInit() {
     this.cartSubscription = this.cartStore.getState().subscribe(res => {
