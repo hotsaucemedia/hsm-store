@@ -22,7 +22,7 @@ export class CartStore {
     }
 
     getState(): Observable<any> {
-        this.store.subscribe( x => console.log("STORE:" , x));
+        // this.store.subscribe( x => console.log("STORE:" , x));
         return this.store.select('cart');
         
     }

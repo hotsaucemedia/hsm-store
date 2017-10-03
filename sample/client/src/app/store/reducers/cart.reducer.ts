@@ -31,13 +31,13 @@ export function reducer(state = initialState, action: Action): State {
       let addProduct = Object.assign( {}, state, action.payload.product);
       if (index >= 0) {
         quantity = state.products[index].quantity;
-        console.log("QTY: ", quantity);
+        console.log("OLD QTY: ", quantity);
         addProduct.quantity = action.payload.quantity + quantity;
         addProduct.unitPrice = addProduct.price;
         addProduct.subTotalPrice = (parseFloat(addProduct.unitPrice) * parseInt(addProduct.quantity)).toFixed(2);
         console.log("ADD PROD: ", addProduct);
         return {
-          ...state,
+          // ...state,
           products : [
             ...state.products.slice(0, index),
             ...state.products.slice(index + 1),
@@ -51,7 +51,7 @@ export function reducer(state = initialState, action: Action): State {
         addProduct.subTotalPrice = (parseFloat(addProduct.unitPrice) * parseInt(addProduct.quantity)).toFixed(2);
         console.log("add product: ", addProduct );
         return {
-          ...state,
+          // ...state,
           products: [
             ...state.products,
             addProduct  
@@ -65,13 +65,14 @@ export function reducer(state = initialState, action: Action): State {
     case ActionTypes.REMOVE_FROM_CART: {
       
       //  return a new array excluding the product that needs to be removed
-      let index = state.products.findIndex((product) => product.id === action.payload.id) 
+      let index = state.products.findIndex((product) => product.id === action.payload.id)
         return {
-          ...state,
+          // ...state,
           products: [
             ...state.products.slice(0, index),
             ...state.products.slice(index + 1)  
-          ]
+          ],
+          total: state.total - state.products[index].subTotalPrice
         }
       
       
@@ -102,6 +103,7 @@ export function reducer(state = initialState, action: Action): State {
       // Array of matching products
       let index = state.products.findIndex((product) => product.id === action.payload.item.id);
       console.log("index: ", index);
+      let oldSubTotalPrice = state.products[index].quantity * state.products[index].unitPrice
 
       let updatedProduct = Object.assign( {}, state, action.payload.item);
       console.log ("updated product: ", updatedProduct);
@@ -109,12 +111,13 @@ export function reducer(state = initialState, action: Action): State {
       updatedProduct.quantity = action.payload.quantity;
       updatedProduct.subTotalPrice = (parseFloat(updatedProduct.unitPrice) * parseInt(updatedProduct.quantity)).toFixed(2);
       return {
-        ...state,
+        // ...state,
         products : [
           ...state.products.slice(0, index),
           updatedProduct,
           ...state.products.slice(index + 1)
-        ]
+        ],
+        total: state.total - oldSubTotalPrice + parseFloat(updatedProduct.subTotalPrice)
       }
 
     }

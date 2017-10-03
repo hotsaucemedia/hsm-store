@@ -50,7 +50,7 @@ export class CartComponent {
     this.totalQuantity = 0;
     this.quantity = [];
     this.cart.forEach((item, i) => {
-      console.log("ITEM: ", item);
+      // console.log("ITEM: ", item);
       unitPrice = parseFloat(item.unitPrice);
       intQuantity = parseInt(item.quantity);
       subTotalCost.push(unitPrice * intQuantity);
@@ -69,8 +69,7 @@ export class CartComponent {
     this.totalQuantity = this.quantity.reduce((prev, cur) => {
       return prev + cur
     }, 0)
-    console.log("TOTAL QTY: ", this.quantity)
-    // this.cart['total'] = this.totalPrice
+
   }
 
   updateCart(product) {
