@@ -1,37 +1,64 @@
-<div class="container">
-
-    <div id="products" class="row list-group">
-        <div *ngFor="let product of products; let i=index">
-            <div class="item  col-xs-4 col-lg-4">
-                <div class="thumbnail">             
-                        <!--<img class="group list-group-image prettyPhoto" src={{product.src}} alt="" (click)="open(i)"/>-->
-                        <img class="group list-group-image prettyPhoto" src={{product.src}} alt=""/>
-                    <div class="caption">
-                        <h4 class="group inner list-group-item-heading">
-                            {{product.name}}</h4>
-                        <p class="group inner list-group-item-text">
-                            {{product.desc}}</p>
-                        <div class="row">
-                            <div class="col-md-3"><strong>Quantity: </strong></div>
-                            <div class="col-md-6">
-                                <input type="number" min="0" class="form-control" [(ngModel)]="quantity">
+<div class="no-touch">
+        <div class="container">
+        <div class="wrap">
+                <div *ngFor="let product of products; let i=index">
+                    <div class="productBox">
+                            
+                        <div class="boxInner">  
+                                <span class="badge counter" *ngIf="counter[product.name]>0">{{counter[product.name]}} in cart!</span>
+                                
+                 
+                            <img class="group list-group-image prettyPhoto" src={{product.src}} (click)="clickedProduct(product)" alt="{{product.name}}"/>
+                            <div class="caption">
+                                <div class="title">
+                                    <strong class="name">{{product.name}}</strong>
+                                    <strong class="price">${{product.price}}</strong>
+                                </div>
+                            </div> 
+                            <div class="button">
+                                <button (click)="addToCart(product)" class="btn btn-xs btn-success">Add to Cart</button>                               
+                                <button (click)="clickedProduct(product)" class="btn btn-xs btn-primary">Details</button>
                             </div>
-                        </div>
-                        <div class="col-md-3"></div>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <p class="lead">
-                                    ${{product.price}}</p>
-                            </div>
-                            <div class="col-xs-12 col-md-6">
-                                <button (click)="addToCart(product)" class="btn btn-sm btn-primary">Add to Cart</button>
-                                <button (click)="clickedProduct(product)" class="btn btn-sm btn-success">Details</button>
+                    </div>
+                </div>
+        </div>
+        </div>
+        </div>
+        
+        
+        <!-- <div class="container">
+        
+            <div id="products" class="row list-group">
+                <div  *ngFor="let product of products; let i=index">
+                    <div class="item col-xs-12 col-md-6 col-lg-4">
+                        <div class="thumbnail">             
+                            <img class="group list-group-image prettyPhoto" src={{product.src}} (click)="clickedProduct(product)" alt=""/>
+                            <div class="caption">
+                                <h4 class="group inner list-group-item-heading">
+                                    {{product.name}}</h4>
+                                <p class="group inner list-group-item-text">
+                                    {{product.desc}}
+                                </p>
+                                <div>
+                                    <strong class="qty">Quantity: </strong>
+                                    <input type="number" min="1" class="form-control qty" [(ngModel)]=quantity[product.name]> 
+                                </div>  
+                                <div class="row">
+                                    <div class="col-xs-4 col-md-4">
+                                        <p class="lead">
+                                            ${{product.price}}</p>
+                                    </div>
+                                    <div class="col-xs-4 col-md-4">
+                                        <button (click)="addToCart(product)" class="btn btn-sm btn-success">Add to Cart</button>
+                                    </div>
+                                    <div class="col-xs-4 col-md-4">                               
+                                        <button (click)="clickedProduct(product)" class="btn btn-sm btn-primary">Details</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-</div>
+        
+        </div> -->

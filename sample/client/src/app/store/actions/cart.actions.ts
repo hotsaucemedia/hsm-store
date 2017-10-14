@@ -10,17 +10,21 @@ export const ActionTypes = {
   SELECT:               type('[Cart] Select'),
   ADD_TO_CART:          type('[Cart] Add'),
   REMOVE_FROM_CART:     type('[Cart] Remove'),
+  UPDATE_CART:          type('[Cart] Update'),
+  CLEAR:                type('[Cart] Clear'),
 };
 
 @Injectable()
-export class CartStore {
+export class CartActions {
     state: any;
     constructor(private store: Store<any>) {
         this.state = this.getState();
     }
 
     getState(): Observable<any> {
+        // this.store.subscribe( x => console.log("STORE:" , x));
         return this.store.select('cart');
+        
     }
 
     addToCart(product, quantity) {
@@ -38,6 +42,17 @@ export class CartStore {
         this.store.dispatch({
             type: ActionTypes.REMOVE_FROM_CART,
             payload: payload
+        })
+    }
+
+    updateCart(item, quantity){
+        console.log('updating item:', item, "NEW QTY: ", quantity);
+        this.store.dispatch({
+            type: ActionTypes.UPDATE_CART,
+            payload: {
+                item,
+                quantity
+            }
         })
     }
 

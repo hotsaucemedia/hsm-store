@@ -37,7 +37,9 @@
                   </li>
 
                   <li>
-                    <a class="page-scroll"[routerLink]="['/cart']"><span class="fa fa-shopping-cart fa-lg" aria-hidden="true"></span></a>
+                    <a class="page-scroll"[routerLink]="['/cart']"><span class="fa fa-shopping-cart fa-lg" aria-hidden="true"></span>
+                      <span class="badge" *ngIf="totalQuantity"> {{ totalQuantity }}</span> 
+                    </a>
                   </li>
                   <li >
                    <a><img  *ngIf="userApi.isLoggedIn()" class="img-circle vertical-align" [src]="userApi.getImageURL()"> </a>
@@ -50,8 +52,9 @@
                   </li>
                   <li class="vertical-center" *ngIf="totalPrice">
                     <!--<div class="thumbnail price">-->
-                    <span class="badge"> <strong>Total Items: </strong> {{ totalQuantity }} ,<strong> Total Price: ${{ totalPrice }}</strong></span> 
-                  </li>
+                      <!-- <span class="badge"> <strong>Total Items: </strong> {{ totalQuantity }} ,<strong> Total Price: ${{ totalPrice }}</strong></span>  -->
+                      <!-- <span class="badge"> {{ totalQuantity }} items at ${{ totalPrice }}</span>  -->
+                    </li>
               </ul>
           </div>
           <!-- /.navbar-collapse -->

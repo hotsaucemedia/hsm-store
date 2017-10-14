@@ -1,3 +1,72 @@
+
+body {
+  margin: 0;
+  padding: 0;
+  /* background: #EEE; */
+  font: 10px/13px 'Lucida Sans',sans-serif;
+} 
+
+.productDescBox {
+  display: block;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+/* This is the actual content area for each product.  
+  It is positioned with 10 pixels around each edge and 40 from bottom. */
+.productId{
+  float:  left;
+
+}
+.productPrice{
+  float: right;
+}
+
+.productImage {
+  /* We want our images to fill the full tile width, so we use width:100% */
+  /* width: 80%;  */
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 35px;
+}
+
+.productQty{
+  max-width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* The buttons go at the bottom of each tile*/
+.productButton {
+  bottom: -20px;
+  left: 0;
+  right: 0;
+  margin-bottom: 10px;
+  padding: 10px;
+  text-align: center;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+
+
+.btn{
+  display: inline-block;
+  margin: 0px;
+}
+
+.btn-danger{
+  float:  right;
+}
+.btn-success{
+  float: left;
+}
+
+
+
 .image {
   font-size: 2em;
   transition: transform .3s ease-out;
@@ -8,4 +77,37 @@
     transform: translate(0, -5px);
      cursor: pointer;
 }
-	 
+
+    /* Here are our media queries to "snap" the number of tiles per row: */
+    @media only screen and (max-width : 480px) {
+      /* Smartphone view: 1 tile */
+      .productDescBox {
+         width: 100%;
+         padding-bottom: 100%;
+      }
+   }
+   @media only screen and (max-width : 650px) and (min-width : 481px) {
+      /* Tablet view: 2 tiles */
+      .productDescBox {
+         width: 50%;
+         padding-bottom: 75%;
+      }
+   }
+   @media only screen and (max-width : 1050px) and (min-width : 651px) {
+      /* Small desktop / ipad view: 3 tiles */
+      .productDescBox {
+         width: 33.3%;
+         padding-bottom: 60%;
+      }
+   }
+   @media only screen and (max-width : 1290px) and (min-width : 1051px) {
+      /* Medium desktop: 4 tiles */
+      .productDescBox {
+         width: 50%;
+         padding-bottom: 25%;
+      }
+   }
+
+   .productDesc{
+     text-align: left;
+   }

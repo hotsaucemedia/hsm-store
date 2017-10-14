@@ -7,22 +7,23 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server"
   },
-  "dependencies":{
-    "express": "*",
+  "dependencies": {
     "bcrypt": "*",
     "body-parser": "*",
     "compression": "*",
     "cookie-parser": "*",
+    "cors": "*",
     "dotenv": "*",
+    "express": "*",
     "express-session": "*",
+    "jsonwebtoken": "*",
     "morgan": "*",
     "mysql": "*",
     "mysql2": "*",
+    "passport-jwt": "*",
     "sequelize": "*",
     "sequelize-fixtures": "*",
-    "cors": "*",
-    "jsonwebtoken": "*",
-    "passport-jwt": "*"
+    "stripe": "^5.1.0"
   },
   "author": "Reza",
   "license": "ISC"

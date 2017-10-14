@@ -15,9 +15,11 @@ var db        = {};
 fs
   .readdirSync(__dirname)
   .filter(function(file) {
+    // console.log("FILES:", file);
     return (file.indexOf(".") !== 0) && (file !== "index.js");
   })
   .forEach(function(file) {
+    // console.log("this file:", file);
     var model = sequelize.import(path.join(__dirname, file));
     db[model.name] = model;
     
@@ -35,9 +37,15 @@ db.Sequelize = Sequelize;
 
 // setting table relations
 db.sequelize.models.user.hasMany(db.sequelize.models.auth_user, { foreignKey: 'user_id' });
-db.sequelize.models.auth_user.belongsTo(db.sequelize.models.user, { foreignKey: 'user_id' });
+// db.sequelize.models.auth_user.belongsTo(db.sequelize.models.user, { foreignKey: 'user_id' });
 
 db.sequelize.models.provider.hasMany(db.sequelize.models.auth_user, { foreignKey: 'provider_id' });
-db.sequelize.models.auth_user.belongsTo(db.sequelize.models.provider, { foreignKey: 'provider_id' });
+// db.sequelize.models.auth_user.belongsTo(db.sequelize.models.provider, { foreignKey: 'provider_id' });
+
+db.sequelize.models.user.hasMany(db.sequelize.models.payment, { foreignKey: 'user_id' });
+// db.sequelize.models.payment.belongsTo(db.sequelize.models.user, { foreignKey: 'user_id' });
+
+db.sequelize.models.category.hasMany(db.sequelize.models.product, { foreignKey: 'cat_id' });
+// db.sequelize.models.product.belongsTo(db.sequelize.models.category, { foreignKey: 'cat_id' });
 
 module.exports = db;

@@ -11,6 +11,7 @@ import { LightboxModule } from 'angular2-lightbox';
 
 import { AppComponent } from './app.component';
 import { FwModule } from '../fw/fw.module';
+import { PaymentModule } from './payments/payment.module';
 import { ServicesComponent } from './components/services/services.component';
 import { ProductsComponent } from './components/products/products.component';
 import { appRoutes } from './app.routing';
@@ -29,7 +30,7 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { CartComponent } from './components/cart/cart.component';
 import { ProductService } from './services/product.service';
 import { reducer } from './store/reducers';
-import { CartStore } from './store/cart.store';
+import { CartActions } from './store/actions/cart.actions';
 
 
 
@@ -48,11 +49,11 @@ import { CartStore } from './store/cart.store';
     HttpModule,
     FlashMessagesModule,
     FwModule,
+    PaymentModule,
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule,
     MaterialModule,
-    StoreModule.provideStore(reducer),
-    StoreDevtoolsModule.instrumentOnlyWithExtension(),
+    StoreModule.forRoot(reducer),
     LightboxModule
   ],
   providers: [
@@ -62,7 +63,7 @@ import { CartStore } from './store/cart.store';
     AuthGuard,
     MainAuthService,
     ProductService,
-    CartStore
+    CartActions
   ],
   bootstrap: [AppComponent]
 })

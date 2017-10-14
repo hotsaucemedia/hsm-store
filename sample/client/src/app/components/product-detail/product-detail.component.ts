@@ -6,7 +6,7 @@ import { Lightbox, IAlbum } from 'angular2-lightbox';
 
 import { Product } from '../../models/Product';
 import { ProductService } from '../../services/product.service';
-import { CartStore } from '../../store/cart.store';
+import { CartActions } from '../../store/actions/cart.actions';
 
 @Component({
     selector: 'app-product-detail',
@@ -23,13 +23,16 @@ export class ProductDetailComponent {
         private productService:ProductService,
         private route:ActivatedRoute,
         private location:Location,
-        private cartStore: CartStore,
+        private cartActions: CartActions,
         private flashMessage: FlashMessagesService,
         private lightbox: Lightbox
-    ) { }
+    ) {
+        console.log("PARAMS: ", this.route.snapshot.params['id']); 
+     }
 
     addToCart(product) {
-        this.cartStore.addToCart(product, this.quantity || 1)
+        // this.cartStore.addToCart(product, this.quantity || 1)
+        this.cartActions.addToCart(product,this.quantity)
     }
 
     ngOnInit() {

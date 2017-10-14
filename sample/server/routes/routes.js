@@ -1,11 +1,14 @@
 const bCrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const jwtSecret = require('../config/jwtSecret');
+const config = require('../config/config');
+const stripe = require('stripe')(config.stripeKey);
 
-module.exports = function(app, user, auth_user, product){
+module.exports = function(app, user, auth_user, product, payment, category){
 	const User = user;
   const Auth_user = auth_user;
-	const Product = product;
+  const Product = product;
+  const Payment = payment;
+  const Category = category;
 
 
   // login section
@@ -75,7 +78,7 @@ module.exports = function(app, user, auth_user, product){
       if(user){
         console.log("@@@@@@@@@@@ executing user.get");
         const userInfo = user.get();
-        const token = jwt.sign(userInfo, jwtSecret.secret, {
+        const token = jwt.sign(userInfo, config.secret, {
           expiresIn: 3000
         });
         req.msg = "You are successfully logged in using Facebook (as before)!";
@@ -117,7 +120,7 @@ module.exports = function(app, user, auth_user, product){
                   return User.update(data, { where: { email : req.body.email } }).then(function(){
                     console.log("@@@@@@@@@@@ executing user.get");
                     const userInfo = user.get();
-                    const token = jwt.sign(userInfo, jwtSecret.secret, {
+                    const token = jwt.sign(userInfo, config.secret, {
                       expiresIn: 3000
                     });
                     req.msg = "You are successfully logged in using Facebook. (new Facebook relogin)";
@@ -145,7 +148,7 @@ module.exports = function(app, user, auth_user, product){
                     return User.update(data, { where: { email : req.body.email } }).then(function(){
                       console.log("@@@@@@@@@@@ executing user.get");
                       const userInfo = user.get();
-                      const token = jwt.sign(userInfo, jwtSecret.secret, {
+                      const token = jwt.sign(userInfo, config.secret, {
                         expiresIn: 3000
                       });
                       req.msg = "You are successfully logged in using Facebook. (first Facebook login)";
@@ -198,7 +201,7 @@ module.exports = function(app, user, auth_user, product){
                     console.log("NEW USER: ", newUser);
                     const userInfo = newUser.get();
                     console.log("STRINGIFIED NEW USER: ", userInfo)
-                    const token = jwt.sign(userInfo, jwtSecret.secret, {
+                    const token = jwt.sign(userInfo, config.secret, {
                       expiresIn: 3000
                     });
                     req.msg = "You are successfully logged in using Facebook. (first login ever)";
@@ -348,7 +351,7 @@ module.exports = function(app, user, auth_user, product){
   });
 
 function sendUserToClient(user, msg, res){
-  const token = jwt.sign(user, jwtSecret.secret, {
+  const token = jwt.sign(user, config.secret, {
     expiresIn: 3000  
   });
   user.password = null;
@@ -364,7 +367,7 @@ function sendUserToClient(user, msg, res){
 	app.get('/users/profile', function(req, res, next) {
     console.log("Header authorization from client: ", req.headers.authorization);
     let str = req.headers.authorization;
-    jwt.verify(str.substring(4), jwtSecret.secret, function(err, user) {
+    jwt.verify(str.substring(4), config.secret, function(err, user) {
       if(!err){
         console.log("decoded user: ", user);
         //check it....................................TODO
@@ -376,7 +379,7 @@ function sendUserToClient(user, msg, res){
 
 
 
-  app.get('/product-detail/:id', function(req,res){
+  app.get('/product-detail/:id', function(req,res,next){
     console.log("REQ>PARAM: ", req.params.id );
     Product.findOne({where: {id: req.params.id}}).then((product) => {
       if (!product){
@@ -405,6 +408,78 @@ function sendUserToClient(user, msg, res){
     });
   })
 
+  // payment data entry
+	app.post("/payments", (req, res) => {
+    console.log("payment data from client: ", req.body);
+    const payment = {
+                token 		    : req.body.token,
+                amount    	  : req.body.amount,
+                user_id 	    : req.body.user_id    
+                };
+    // testing charges!
+    const charge2 = stripe.charges.create({
+      amount: req.body.amount,
+      currency: "cad",
+      description: "Example charge",
+      // source: "test"
+      source: req.body.token
+    }, (err, charge) => {  
+      console.log("Entered ChargeCreate Callback Function!");       
+        if (err && err.type === 'StripeCardError') {
+          console.log("ERRORRRRRRRRRRRR: ", err);
+        }
+        if(err){
+          console.log("CHARGE is NULL!", err);
+        } 
+      console.log("CHARGE: ", charge);
+      return Payment.create(payment).then(function(newPayment, created){
+        if(!newPayment){
+          return res.json({success: false, msg: 'Failed to add new payment to the database!'});
+        }else{
+          return res.json({success: true, msg: 'The new payment is added to the database!'});
+        }
+      }).catch((err) => {
+        return res.json({success: false, msg:'Something went wrong while registering the payment in the database!'});
+      });
+    });
+    
+  });
+
+  
+
+  app.get('/category', function(req,res,next) {
+    console.log("REQ from client: ", req);
+
+    Category.findAll().then(function (category) {
+      if (!category) {
+        req.msg = "No category in database!";
+        return res.json({success: false, msg:req.msg});
+      }else{
+        sendCategoriesToClient(category, "Categories are loaded successfully.", res);
+        }
+      }).catch(function(err){
+			  console.log("###### Error : ", err);												
+    });
+  })
+
+
+  app.get('/category/:id', function(req,res,next){
+    console.log("REQ>PARAM: ", req.params.id );
+    Category.findOne({where: {id: req.params.id}}).then((category) => {
+      if (!category){
+        req.msg = "No such a category in database!";
+        return res.json({success: false, msg:req.msg});
+      }else{
+        sendCategoryToClient(category, "the product is found.", res);
+      }
+    }).catch(function(err){
+			  console.log("###### Error : ", err);
+    });
+  })
+
+
+
+
 function sendProductToClient(product, msg, res){
   return res.json({ success: true,
                     msg: msg,
@@ -420,6 +495,20 @@ function sendProductsToClient(products, msg, res){
                   });
 }
 
+function sendCategoryToClient(category, msg, res){
+  return res.json({ success: true,
+                    msg: msg,
+                    category: category
+                  });
+}
+
+
+function sendCategoriesToClient(categories, msg, res){
+  return res.json({ success: true,
+                    msg: msg,
+                    categories: categories
+                  });
+}
 
 };
 
