@@ -1,15 +1,8 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Product } from '../../models/Product';
-import { Action, ActionReducer } from '@ngrx/store';
-import { ActionTypes } from '../cart.store';
-import { CartStore } from '../../store/cart.store';
-// import { ShoppingCart } from '../../models/shopping-cart';
-// import { ShopItem } from '../../models/shop-item';
-
-// import { CartComponent } from '../../components/cart/cart.component';
+// import { Action, ActionReducer } from '@ngrx/store';
+import { ActionTypes } from './../actions/cart.actions';
 
 export interface State {
-  // order: Array<Orders>;
   products: Array<Product>;
   total: number;
 }
@@ -19,10 +12,10 @@ const initialState: State = {
   total: 0
 };
 
-export function reducer(state = initialState, action: Action): State {
+export function reducer(state = initialState, action): State {
   switch (action.type) {
     case ActionTypes.ADD_TO_CART: {
-      
+
       let quantity = 0;
       // Array of matching products
       let index = state.products.findIndex((product) => product.id === action.payload.product.id);

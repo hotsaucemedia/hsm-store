@@ -3,11 +3,12 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 const stripe = require('stripe')(config.stripeKey);
 
-module.exports = function(app, user, auth_user, product, payment){
+module.exports = function(app, user, auth_user, product, payment, category){
 	const User = user;
   const Auth_user = auth_user;
   const Product = product;
   const Payment = payment;
+  const Category = category;
 
 
   // login section
@@ -446,6 +447,39 @@ function sendUserToClient(user, msg, res){
 
   
 
+  app.get('/category', function(req,res,next) {
+    console.log("REQ from client: ", req);
+
+    Category.findAll().then(function (category) {
+      if (!category) {
+        req.msg = "No category in database!";
+        return res.json({success: false, msg:req.msg});
+      }else{
+        sendCategoriesToClient(category, "Categories are loaded successfully.", res);
+        }
+      }).catch(function(err){
+			  console.log("###### Error : ", err);												
+    });
+  })
+
+
+  app.get('/category/:id', function(req,res,next){
+    console.log("REQ>PARAM: ", req.params.id );
+    Category.findOne({where: {id: req.params.id}}).then((category) => {
+      if (!category){
+        req.msg = "No such a category in database!";
+        return res.json({success: false, msg:req.msg});
+      }else{
+        sendCategoryToClient(category, "the product is found.", res);
+      }
+    }).catch(function(err){
+			  console.log("###### Error : ", err);
+    });
+  })
+
+
+
+
 function sendProductToClient(product, msg, res){
   return res.json({ success: true,
                     msg: msg,
@@ -461,6 +495,20 @@ function sendProductsToClient(products, msg, res){
                   });
 }
 
+function sendCategoryToClient(category, msg, res){
+  return res.json({ success: true,
+                    msg: msg,
+                    category: category
+                  });
+}
+
+
+function sendCategoriesToClient(categories, msg, res){
+  return res.json({ success: true,
+                    msg: msg,
+                    categories: categories
+                  });
+}
 
 };
 

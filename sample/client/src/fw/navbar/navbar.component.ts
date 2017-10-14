@@ -6,7 +6,7 @@ import { UserApi } from '../userApi/user-api';
 
 //change thiese after testing. not a good idea at all!
 import { ProductService } from '../../app/services/product.service';
-import {CartStore} from '../../app/store/cart.store';
+import {CartActions} from '../../app/store/actions/cart.actions';
 
 
 
@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit {
         private screenService: ScreenService,
         private userApi: UserApi,
         private productService:ProductService,
-        private cartStore: CartStore
+        private cartActions: CartActions
   ) { }
 
   getTotalPrice() {
@@ -54,7 +54,7 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cartStore.getState().subscribe(res => {
+    this.cartActions.getState().subscribe(res => {
       this.cart = res
       this.getTotalPrice()
     })

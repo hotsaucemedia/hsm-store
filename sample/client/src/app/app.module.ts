@@ -30,7 +30,7 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { CartComponent } from './components/cart/cart.component';
 import { ProductService } from './services/product.service';
 import { reducer } from './store/reducers';
-import { CartStore } from './store/cart.store';
+import { CartActions } from './store/actions/cart.actions';
 
 
 
@@ -53,11 +53,7 @@ import { CartStore } from './store/cart.store';
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule,
     MaterialModule,
-    StoreModule.provideStore(reducer),
-    StoreDevtoolsModule.instrumentOnlyWithExtension(),
-    StoreDevtoolsModule.instrumentStore({
-      maxAge: 5
-    }),
+    StoreModule.forRoot(reducer),
     LightboxModule
   ],
   providers: [
@@ -67,7 +63,7 @@ import { CartStore } from './store/cart.store';
     AuthGuard,
     MainAuthService,
     ProductService,
-    CartStore
+    CartActions
   ],
   bootstrap: [AppComponent]
 })

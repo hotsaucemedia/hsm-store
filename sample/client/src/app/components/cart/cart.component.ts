@@ -3,7 +3,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { ProductService } from '../../services/product.service';
-import { CartStore } from '../../store/cart.store';
+import { CartActions } from '../../store/actions/cart.actions';
 import { Subscription } from 'rxjs/Subscription';
 import { UserService } from '../../services/user.service';
 import { MakePaymentComponent } from '../../payments/make-payment/make-payment.component';
@@ -25,7 +25,7 @@ export class CartComponent {
 
   constructor(
           private productService: ProductService,
-          private cartStore: CartStore,
+          private cartActions: CartActions,
           private location:Location,
           private router: Router,
           private userService: UserService,
@@ -35,7 +35,7 @@ export class CartComponent {
 
   removeProduct(product) {
 
-    this.cartStore.removeFromCart(product)
+    this.cartActions.removeFromCart(product)
     this.getTotalPrice();
   }
 
@@ -76,7 +76,7 @@ export class CartComponent {
     console.log("updatedProduct: ", product);
     let index = this.cart.findIndex((item) => item.id === product.id) 
     console.log("QTYs:", this.quantity[index]);
-    this.cartStore.updateCart(product, this.quantity[index]);
+    this.cartActions.updateCart(product, this.quantity[index]);
     this.getTotalPrice();
   }
 
@@ -91,7 +91,7 @@ export class CartComponent {
   // }
 
   ngOnInit() {
-    this.cartSubscription = this.cartStore.getState().subscribe(res => {
+    this.cartSubscription = this.cartActions.getState().subscribe(res => {
       this.cart = res.products;
       console.log("res.products: ", res.products)
     });

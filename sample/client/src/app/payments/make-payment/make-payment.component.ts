@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 
 import { UserService } from '../../services/user.service';
-import { CartStore } from '../../store/cart.store';
+import { CartActions } from '../../store/actions/cart.actions';
 
 @Component({
   selector: 'app-make-payment',
@@ -19,7 +19,7 @@ export class MakePaymentComponent implements OnInit {
 
   constructor(private paymentService: PaymentService,
               private userService: UserService,
-              private cartStore: CartStore
+              private cartActions: CartActions
              ) { }
 
   ngOnInit() {
@@ -36,7 +36,7 @@ export class MakePaymentComponent implements OnInit {
   handlePayment() {
     if (this.userService.isLoggedIn()){
       
-      this.cartStore.getState().subscribe(res => {
+      this.cartActions.getState().subscribe(res => {
         this.amount = res.total*100;
       });
 

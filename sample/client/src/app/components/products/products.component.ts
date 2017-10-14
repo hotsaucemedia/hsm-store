@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { Product } from '../../models/Product';
 import { ProductService } from '../../services/product.service';
-import { CartStore } from '../../store/cart.store';
+import { CartActions } from '../../store/actions/cart.actions';
 
 @Component({
   selector: 'app-products',
@@ -26,7 +26,7 @@ export class ProductsComponent implements OnInit {
 
   constructor (private productService:ProductService,
                private router:Router, 
-               private cartStore: CartStore,
+               private cartActions: CartActions,
                private flashMessage: FlashMessagesService
               ) {
 }
@@ -41,7 +41,7 @@ export class ProductsComponent implements OnInit {
     console.log("this.quantity[",product.id,"]:  ", this.quantity[product.name]);
     
     this.counter[product.name] += 1; 
-    this.cartStore.addToCart(product, this.quantity[product.name])
+    this.cartActions.addToCart(product, this.quantity[product.name])
     this.loadCart();
   }
 
@@ -72,7 +72,7 @@ export class ProductsComponent implements OnInit {
 
  
   loadCart(){
-  this.cartSubscription = this.cartStore.getState().subscribe(res => {
+  this.cartSubscription = this.cartActions.getState().subscribe(res => {
     this.cart = res.products;
   });
   this.cart.forEach((cartItem,i) => {

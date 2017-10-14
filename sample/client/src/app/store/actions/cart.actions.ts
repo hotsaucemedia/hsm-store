@@ -11,11 +11,11 @@ export const ActionTypes = {
   ADD_TO_CART:          type('[Cart] Add'),
   REMOVE_FROM_CART:     type('[Cart] Remove'),
   UPDATE_CART:          type('[Cart] Update'),
-  CLEAR:                type('[Cart] Clear')
+  CLEAR:                type('[Cart] Clear'),
 };
 
 @Injectable()
-export class CartStore {
+export class CartActions {
     state: any;
     constructor(private store: Store<any>) {
         this.state = this.getState();
